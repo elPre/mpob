@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.mpob.mpob.MainActivity"
+    android:layout_marginLeft="40dp"
+    android:layout_marginRight="40dp"
+    android:layout_marginBottom="20dp"
+    android:layout_marginTop="20dp">
+
+    <ImageView
+        android:id="@+id/login_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:src="@mipmap/ic_launcher_round"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="12dp"/>
+
+
+    <EditText
+        android:id="@+id/login_activity_mail"
+        android:inputType="textEmailAddress"
+        android:textAlignment="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edittext_selector"
+        android:layout_below="@id/login_logo"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="0dp"
+        android:hint="@string/email"/>
+
+    <EditText
+        android:id="@+id/login_activity_password"
+        android:inputType="textEmailAddress"
+        android:textAlignment="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edittext_selector"
+        android:layout_below="@id/login_activity_mail"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="12dp"
+        android:hint="@string/password"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/login_activity_btn"
+        style="@style/BtnLogin"
+        android:text="@string/login"
+        android:layout_below="@id/login_activity_password"
+        android:layout_centerInParent="true"/>
+
+
+
+
+
+
+</RelativeLayout>
