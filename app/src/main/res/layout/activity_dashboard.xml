@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="40dp"
+    android:layout_marginRight="40dp"
+    android:layout_marginBottom="20dp"
+    android:layout_marginTop="20dp">
+
+
+    <TextView
+        android:id="@+id/dashboard_activity_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="@string/dashboard_layout_header"
+        android:layout_centerInParent="true"
+        android:textSize="30sp"
+        android:layout_marginBottom="12dp"/>
+
+    <Button
+        android:id="@+id/activity_dashboard_live_video_btn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Live Video"
+        android:layout_below="@id/dashboard_activity_header"
+        android:layout_marginTop="5dp"/>
+
+    <Button
+        android:id="@+id/activity_dashboard_special_events_btn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Special Events"
+        android:layout_below="@id/activity_dashboard_live_video_btn"
+        android:layout_marginTop="5dp"/>
+
+    <Button
+        android:id="@+id/activity_dashboard_teacher_profile_btn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Teacher Profile"
+        android:layout_below="@id/activity_dashboard_special_events_btn"
+        android:layout_marginTop="20dp"/>
+
+    <Button
+        android:id="@+id/activity_dashboard_my_account_btn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="My Account"
+        android:layout_below="@id/activity_dashboard_teacher_profile_btn"
+        android:layout_marginTop="20dp"/>
+
+    <Button
+        android:id="@+id/activity_dashboard_faq_btn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="FAQ"
+        android:layout_below="@id/activity_dashboard_my_account_btn"
+        android:layout_marginTop="20dp"/>
+
+    <Button
+        android:id="@+id/activity_dashboard_signout_btn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Sign Out"
+        android:layout_below="@id/activity_dashboard_faq_btn"
+        android:layout_marginTop="20dp"/>
+
+
+</RelativeLayout>
