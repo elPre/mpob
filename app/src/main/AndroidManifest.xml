@@ -21,14 +21,14 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-
         </activity>
-
         <activity android:name=".forgot.ForgotView"
             android:theme="@style/NoActionBarTheme"/>
-
         <activity android:name=".dashboard.DashboardView"
             android:theme="@style/NoActionBarTheme"/>
+        <activity
+            android:name=".video.VideoView"
+            android:theme="@style/NoActionBarTheme" />
 
     </application>
 
