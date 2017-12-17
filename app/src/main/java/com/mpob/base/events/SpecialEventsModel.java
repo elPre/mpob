@@ -1,4 +1,4 @@
-package com.mpob.base.login;
+package com.mpob.base.events;
 
 import android.os.Handler;
 
@@ -8,10 +8,10 @@ import android.os.Handler;
  * Santa Monica California.
  */
 
-public class LoginModel implements ILoginAPI.Model {
+public class SpecialEventsModel implements ISpecialEventsAPI.Model {
 
     @Override
-    public void wsExecuteCall(final ILoginAPI.CallBack callBack) {
+    public void wsExecuteCall(final ISpecialEventsAPI.CallBack callBack) {
         //TODO call to the webservices and login
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -19,7 +19,7 @@ public class LoginModel implements ILoginAPI.Model {
                 callBack.onSuccess();
 
             }
-        }, 0L);
+        }, 2000L);
 
     }
 }

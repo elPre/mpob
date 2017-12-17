@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.mpob.base.login.LoginView"
-    android:layout_marginLeft="40dp"
-    android:layout_marginRight="40dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
     android:layout_marginBottom="20dp"
     android:layout_marginTop="20dp">
 
@@ -47,7 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:id="@+id/login_activity_btn"
-        style="@style/BtnLogin"
+        style="@style/BtnStyle"
         android:text="@string/login"
         android:layout_below="@id/login_activity_password"
         android:layout_centerInParent="true"/>
@@ -58,14 +58,14 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:visibility="gone"
+        android:translationZ="10dp"
         android:indeterminateDrawable="@drawable/progress" />
 
     <TextView
         android:id="@+id/login_activity_link_forgot"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColorLink="#1a0dab"
-        android:layout_marginTop="14dp"
+        style="@style/TextLinkStyle"
         android:layout_below="@id/login_activity_btn"
         android:text="@string/forgot_password"
         android:layout_centerInParent="true"/>

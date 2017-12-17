@@ -1,6 +1,7 @@
 package com.mpob.base.forgot;
 
 import com.mpob.base.login.ILoginAPI;
+import com.mpob.base.pojos.User;
 
 /**
  * Created by HOLV on 10,November,2017
@@ -30,6 +31,11 @@ public class ForgotPresenter implements ILoginAPI.Presenter,ILoginAPI.CallBack {
 
     @Override
     public void login(String user, String pass) {
+
+    }
+
+    @Override
+    public void executeAction(int action, User user) {
 
     }
 

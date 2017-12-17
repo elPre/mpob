@@ -1,5 +1,7 @@
 package com.mpob.base.video;
 
+import android.content.Context;
+
 /**
  * Created by HOLV on 10,November,2017
  * My Parents On Board,
@@ -12,25 +14,35 @@ public interface IVideoAPI {
     interface View{
         void showProgress();
         void hideProgress();
-        void sendToDashboard();
-        void hideKeyboard();
-        void showKeyboard();
     }
 
     //presenter connector
     interface Presenter{
-        void login(String user, String pass);
+
+        void init();
+        void play();
+        void pause();
+        void seekTo(long position);
+        short configChanged(short portraitLandscape);
+        void releasePlayerResources();
+
     }
 
     //model bring all the info alive
     interface Model {
-        void wsExecuteCall(CallBack callBack);
+
+        void init();
+        void play();
+        void pause();
+        void seekTo(long position);
+        void onConfigChanged(short portraitLandscape);
+        void releasePlayerResources();
+
     }
 
     //callbacks
     interface CallBack{
-        void onSuccess();
-        void onFailure();
+
     }
 
 }

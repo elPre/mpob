@@ -12,17 +12,12 @@ public class IDashboardAPI {
     interface View{
         void showProgress();
         void hideProgress();
-        void sendToLiveStream();
-        void sendToSpecialEvents();
-        void sendToTeacherProfile();
-        void sendToMyAccount();
-        void sendToFaq();
-        void signOut();
     }
 
     //presenter connector
     interface Presenter{
         void login(String user, String pass);
+        void sendToPage(int pageId);
     }
 
     //model bring all the info alive

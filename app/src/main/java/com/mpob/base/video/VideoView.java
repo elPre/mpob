@@ -1,23 +1,17 @@
 package com.mpob.base.video;
 
-import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
+import com.google.android.exoplayer2.util.Util;
 import com.mpob.base.R;
-import com.mpob.base.dashboard.DashboardView;
-import com.mpob.base.forgot.ForgotView;
-import com.mpob.base.utils.Utils;
 
 /**
- * Created by HOLV on 10,November,2017
+ * Created by HOLV on 3,December,2017
  * My Parents On Board,
  * Santa Monica California.
  */
@@ -25,12 +19,8 @@ import com.mpob.base.utils.Utils;
 public class VideoView extends AppCompatActivity
         implements IVideoAPI.View, View.OnClickListener  {
 
-    private EditText mEmail = null;
-    private EditText mPassword = null;
-    private TextView mForgotPassword = null;
-    private Button mButton = null;
-    private ProgressBar mProgressBar = null;
     private IVideoAPI.Presenter mIPresenter = null;
+    private ProgressBar mProgressBar = null;
 
 
     @Override
@@ -38,47 +28,69 @@ public class VideoView extends AppCompatActivity
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_video);
+        //mProgressBar = (ProgressBar) findViewById(R.id.activity_video_progress_bar);
+        mIPresenter = new VideoPresenter(this);
+
+    }
+
+    @Override
+    public void onClick(View v) {
+
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        //mIPresenter = mRetainedFragment.getData();
+        // Checks the orientation of the screen
+        //set player to height to 200dp and width to match_parent
+        mIPresenter.configChanged((short)newConfig.orientation);
 
     }
 
     @Override
     public void showProgress() {
-        mProgressBar.setVisibility(View.VISIBLE);
+        //mProgressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideProgress() {
-        mProgressBar.setVisibility(View.GONE);
+        //mProgressBar.setVisibility(View.GONE);
+    }
+
+
+    @Override
+    public void onPause() {
+        if (Util.SDK_INT <= 23) {
+            mIPresenter.releasePlayerResources();
+        }
+        super.onPause();
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.login_activity_btn:
-                mIPresenter.login(Utils.getETData(mEmail), Utils.getETData(mPassword));
-                break;
-            case R.id.login_activity_link_forgot:
-                startActivity(new Intent(VideoView.this,ForgotView.class));
-                break;
-            default:
-                throw new IllegalStateException();
+    public void onStop() {
+        if (Util.SDK_INT > 23) {
+            mIPresenter.releasePlayerResources();
+        }
+        super.onStop();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (Util.SDK_INT > 23) {
+            mIPresenter.init();
+            mIPresenter.play();
         }
     }
 
     @Override
-    public void sendToDashboard() {
-        startActivity(new Intent(VideoView.this, DashboardView.class));
-    }
-
-    @Override
-    public void hideKeyboard() {
-        InputMethodManager inputManager = (InputMethodManager) this.getSystemService(this.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-    }
-
-    @Override
-    public void showKeyboard() {
-
+    public void onResume() {
+        super.onResume();
+        if ((Util.SDK_INT <= 23)) {
+            mIPresenter.init();
+            mIPresenter.play();
+        }
     }
 
 

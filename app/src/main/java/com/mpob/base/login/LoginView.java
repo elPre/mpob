@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.mpob.base.R;
 import com.mpob.base.dashboard.DashboardView;
 import com.mpob.base.forgot.ForgotView;
+import com.mpob.base.pojos.User;
 import com.mpob.base.utils.Utils;
 
 /**
@@ -40,14 +41,13 @@ public class LoginView extends AppCompatActivity
         setContentView(R.layout.activity_login);
 
         mIPresenter = new LoginPresenter(this);
+
         mEmail = (EditText) findViewById(R.id.login_activity_mail);
         mPassword = (EditText) findViewById(R.id.login_activity_password);
         mButton = (Button) findViewById(R.id.login_activity_btn);
-        mForgotPassword = Utils.convertToLink(
-                (TextView) findViewById(R.id.login_activity_link_forgot));
+        mForgotPassword = Utils.convertToLink((TextView) findViewById(R.id.login_activity_link_forgot));
         mForgotPassword.setClickable(true);
         mProgressBar = (ProgressBar) findViewById(R.id.login_activity_progress_bar);
-
 
         mButton.setOnClickListener(this);
         mForgotPassword.setOnClickListener(this);
@@ -66,16 +66,13 @@ public class LoginView extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.login_activity_btn:
-                mIPresenter.login(Utils.getETData(mEmail), Utils.getETData(mPassword));
-                break;
-            case R.id.login_activity_link_forgot:
-                startActivity(new Intent(LoginView.this,ForgotView.class));
-                break;
-            default:
-                throw new IllegalStateException();
-        }
+
+        User user = new User();
+        user.setUserName(Utils.getETData(mEmail));
+        user.setPassword(Utils.getETData(mPassword));
+
+        mIPresenter.executeAction(v.getId(),user);
+
     }
 
     @Override

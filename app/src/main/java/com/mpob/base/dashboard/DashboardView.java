@@ -21,7 +21,6 @@ import com.mpob.base.video.VideoView;
 public class DashboardView extends AppCompatActivity
         implements IDashboardAPI.View, View.OnClickListener  {
 
-    private EditText mEmail = null;
     private Button mButtonLiveStream = null;
     private Button mButtonSpecialEvents = null;
     private Button mButtonTeacherProfile = null;
@@ -32,13 +31,13 @@ public class DashboardView extends AppCompatActivity
     private IDashboardAPI.Presenter mIPresenter = null;
 
 
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_dashboard);
 
+        mIPresenter = new DashboardPresenter(this);
         mButtonLiveStream = (Button) findViewById(R.id.activity_dashboard_live_video_btn);
         mButtonSpecialEvents = (Button) findViewById(R.id.activity_dashboard_special_events_btn);
         mButtonTeacherProfile = (Button) findViewById(R.id.activity_dashboard_teacher_profile_btn);
@@ -53,7 +52,6 @@ public class DashboardView extends AppCompatActivity
         mButtonFaq.setOnClickListener(this);
         mSignOut.setOnClickListener(this);
 
-
     }
 
     @Override
@@ -66,60 +64,10 @@ public class DashboardView extends AppCompatActivity
         mProgressBar.setVisibility(View.GONE);
     }
 
-    @Override
-    public void sendToLiveStream() {
-        startActivity(new Intent(DashboardView.this, VideoView.class));
-    }
-
-    @Override
-    public void sendToSpecialEvents() {
-
-    }
-
-    @Override
-    public void sendToTeacherProfile() {
-
-    }
-
-    @Override
-    public void sendToMyAccount() {
-
-    }
-
-    @Override
-    public void sendToFaq() {
-
-    }
-
-    @Override
-    public void signOut() {
-
-    }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.activity_dashboard_live_video_btn:
-                sendToLiveStream();
-                break;
-            case R.id.activity_dashboard_special_events_btn:
-                sendToSpecialEvents();
-                break;
-            case R.id.activity_dashboard_teacher_profile_btn:
-                sendToTeacherProfile();
-                break;
-            case R.id.activity_dashboard_my_account_btn:
-                sendToMyAccount();
-                break;
-            case R.id.activity_dashboard_faq_btn:
-                sendToFaq();
-                break;
-            case R.id.activity_dashboard_signout_btn:
-                signOut();
-                break;
-            default:
-                throw new IllegalStateException();
-        }
+        mIPresenter.sendToPage(v.getId());
     }
 
 
