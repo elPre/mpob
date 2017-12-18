@@ -1,6 +1,5 @@
 package com.mpob.base.video.exo;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
@@ -73,7 +72,6 @@ public class ExoPlayer implements IVideoPlayerAPI, com.google.android.exoplayer2
     private static final int RESOURCE_ID_SIMPLE_PLAYER_FRAME = R.id.activity_video_framelayout;
     private static final int RESOURCE_ID_SIMPLE_EXOPLAYER_ASPECTRATIO_FRAME = R.id.activity_video_exo_player_aspect_ratio;
     private static final int RESOURCE_ID_RELATIVE_LAYOUT_PARENT = R.id.activity_video_relativelayout_parent;
-    private static final int PORTRAIT_MODE = 1;
     private static final int LANDSCAPE_MODE = 2;
 
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
@@ -153,7 +151,7 @@ public class ExoPlayer implements IVideoPlayerAPI, com.google.android.exoplayer2
             createFrameLayoutAndAspectRatio();
             setPlayerLayoutFrame();
             resetViewSurface();
-        }else{
+        } else {
             Log.d(TAG, "start from the frame was stopped");
         }
     }
@@ -505,16 +503,16 @@ public class ExoPlayer implements IVideoPlayerAPI, com.google.android.exoplayer2
         }
         */
 
-        Log.d(TAG,"setPlayerFrameSurface");
+        Log.d(TAG, "setPlayerFrameSurface");
         if (mSurfaceType != SURFACE_TYPE_NONE) {
             ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            if (mFrameLayout.getChildCount()==1) {
+            if (mFrameLayout.getChildCount() == 1) {
                 // might be an existing surface view
                 View framelayoutChild = mFrameLayout.getChildAt(0);
                 if (framelayoutChild instanceof SurfaceView) {
                     // good news we dont need a new one!
-                    Log.d(TAG,"setPlayerFramneSurface found existing surface view");
+                    Log.d(TAG, "setPlayerFramneSurface found existing surface view");
                 } else {
                     // we need one
                     mSurfaceView = mSurfaceType == SURFACE_TYPE_TEXTURE_VIEW ? new TextureView(mContext)
@@ -522,7 +520,7 @@ public class ExoPlayer implements IVideoPlayerAPI, com.google.android.exoplayer2
                     mSurfaceView.setLayoutParams(params);
                     mFrameLayout.addView(mSurfaceView, 0);
                 }
-            } else if (mFrameLayout.getChildCount()==0) {
+            } else if (mFrameLayout.getChildCount() == 0) {
                 // we definitely need one surface view
                 mSurfaceView = mSurfaceType == SURFACE_TYPE_TEXTURE_VIEW ? new TextureView(mContext)
                         : new SurfaceView(mContext);

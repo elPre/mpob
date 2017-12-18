@@ -1,6 +1,5 @@
 package com.mpob.base.video;
 
-import android.app.ActionBar;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -34,9 +33,8 @@ public class VideoView extends AppCompatActivity
         decorView.setSystemUiVisibility(uiOptions);
 
         setContentView(R.layout.activity_video);
-        //mProgressBar = (ProgressBar) findViewById(R.id.activity_video_progress_bar);
+
         mIPresenter = new VideoPresenter(this);
-        mIPresenter.init();
 
     }
 
