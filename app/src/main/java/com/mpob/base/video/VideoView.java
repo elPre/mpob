@@ -1,5 +1,6 @@
 package com.mpob.base.video;
 
+import android.app.ActionBar;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -27,9 +28,15 @@ public class VideoView extends AppCompatActivity
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        View decorView = getWindow().getDecorView();
+        // Hide the status bar.
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+
         setContentView(R.layout.activity_video);
         //mProgressBar = (ProgressBar) findViewById(R.id.activity_video_progress_bar);
         mIPresenter = new VideoPresenter(this);
+        mIPresenter.init();
 
     }
 
@@ -43,7 +50,7 @@ public class VideoView extends AppCompatActivity
         super.onConfigurationChanged(newConfig);
         //mIPresenter = mRetainedFragment.getData();
         // Checks the orientation of the screen
-        //set player to height to 200dp and width to match_parent
+        //set player to height to 230dp and width to match_parent
         mIPresenter.configChanged((short)newConfig.orientation);
 
     }

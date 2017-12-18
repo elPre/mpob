@@ -1,5 +1,6 @@
 package com.mpob.base.video.exo;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
@@ -148,9 +149,12 @@ public class ExoPlayer implements IVideoPlayerAPI, com.google.android.exoplayer2
             createRenderFactory();
             setUpMediaSource(getUri(), getExtension());
             createNewPlayer();
+            clearResumePosition();
             createFrameLayoutAndAspectRatio();
             setPlayerLayoutFrame();
             resetViewSurface();
+        }else{
+            Log.d(TAG, "start from the frame was stopped");
         }
     }
 
@@ -194,7 +198,7 @@ public class ExoPlayer implements IVideoPlayerAPI, com.google.android.exoplayer2
         } else {
             params = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.MATCH_PARENT,
-                    500);
+                    450);
         }
         mFrameLayout.setLayoutParams(params);
     }
@@ -384,7 +388,6 @@ public class ExoPlayer implements IVideoPlayerAPI, com.google.android.exoplayer2
             CookieHandler.setDefault(DEFAULT_COOKIE_MANAGER);
         }
         mShouldAutoPlay = true;
-        clearResumePosition();
         mMainHandler = new Handler();
         mResizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT;
         mMediaDataSourceFactory = buildDataSourceFactory(BANDWIDTH_METER);
@@ -486,6 +489,8 @@ public class ExoPlayer implements IVideoPlayerAPI, com.google.android.exoplayer2
      */
     private void setPlayerLayoutFrame() {
         // Create a surface view and insert it into the content frame, if there is one.
+
+        /*
         if (mFrameLayout != null && mSurfaceType != SURFACE_TYPE_NONE) {
             Log.d(TAG, "setPlayerLayoutFrame different than null");
             ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
@@ -498,6 +503,36 @@ public class ExoPlayer implements IVideoPlayerAPI, com.google.android.exoplayer2
             Log.d(TAG, "setPlayerLayoutFrame surface null");
             mSurfaceView = null;
         }
+        */
+
+        Log.d(TAG,"setPlayerFrameSurface");
+        if (mSurfaceType != SURFACE_TYPE_NONE) {
+            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            if (mFrameLayout.getChildCount()==1) {
+                // might be an existing surface view
+                View framelayoutChild = mFrameLayout.getChildAt(0);
+                if (framelayoutChild instanceof SurfaceView) {
+                    // good news we dont need a new one!
+                    Log.d(TAG,"setPlayerFramneSurface found existing surface view");
+                } else {
+                    // we need one
+                    mSurfaceView = mSurfaceType == SURFACE_TYPE_TEXTURE_VIEW ? new TextureView(mContext)
+                            : new SurfaceView(mContext);
+                    mSurfaceView.setLayoutParams(params);
+                    mFrameLayout.addView(mSurfaceView, 0);
+                }
+            } else if (mFrameLayout.getChildCount()==0) {
+                // we definitely need one surface view
+                mSurfaceView = mSurfaceType == SURFACE_TYPE_TEXTURE_VIEW ? new TextureView(mContext)
+                        : new SurfaceView(mContext);
+                mSurfaceView.setLayoutParams(params);
+                mFrameLayout.addView(mSurfaceView, 0);
+            }
+        } else {
+            mSurfaceView = null;
+        }
+
     }
 
     private void createFrameLayoutAndAspectRatio() {

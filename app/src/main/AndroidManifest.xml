@@ -34,8 +34,7 @@
         <activity android:name=".events.SpecialEventsView" />
         <activity android:name=".video.VideoView"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize"/>
-
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"/>
     </application>
 
 </manifest>

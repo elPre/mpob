@@ -16,8 +16,6 @@ public class VideoPresenter implements IVideoAPI.Presenter,IVideoAPI.CallBack {
     public VideoPresenter(IVideoAPI.View view) {
         mView = view;
         mModel = new VideoModel((Context) view);
-        mModel.init();
-        mModel.play();
     }
 
     @Override
