@@ -7,12 +7,18 @@
     <FrameLayout
         android:id="@+id/activity_video_framelayout"
         android:layout_width="match_parent"
-        android:layout_height="230dp"
+        android:layout_height="250dp"
         android:keepScreenOn="true">
         <com.google.android.exoplayer2.ui.AspectRatioFrameLayout
             android:id="@+id/activity_video_exo_player_aspect_ratio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+    </FrameLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/activity_video_framelayout"
+        android:background="#ff000000">
     </FrameLayout>
 
 </RelativeLayout>

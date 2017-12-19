@@ -2,6 +2,7 @@ package com.mpob.base.video.exo;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
@@ -11,6 +12,7 @@ import android.view.SurfaceView;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
@@ -50,6 +52,7 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.Util;
+import com.mpob.base.BuildConfig;
 import com.mpob.base.R;
 import com.mpob.base.video.IVideoPlayerAPI;
 
@@ -114,6 +117,7 @@ public class ExoPlayer implements IVideoPlayerAPI, com.google.android.exoplayer2
     private long mResumePosition = 0;
     private int mResizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT;
     private int mSurfaceType = SURFACE_TYPE_SURFACE_VIEW;
+    private int mHeight = 0;
 
     private boolean mActiveMediaSourceHaveResumePosition = false;
     private boolean mShouldAutoPlay = false;
@@ -189,14 +193,14 @@ public class ExoPlayer implements IVideoPlayerAPI, com.google.android.exoplayer2
         if (mFrameLayout == null) {
             return;
         }
+
         if (portraitLandscape == LANDSCAPE_MODE) {
             params = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.MATCH_PARENT,
                     RelativeLayout.LayoutParams.MATCH_PARENT);
         } else {
             params = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.MATCH_PARENT,
-                    450);
+                    RelativeLayout.LayoutParams.MATCH_PARENT, mHeight);
         }
         mFrameLayout.setLayoutParams(params);
     }
@@ -487,22 +491,6 @@ public class ExoPlayer implements IVideoPlayerAPI, com.google.android.exoplayer2
      */
     private void setPlayerLayoutFrame() {
         // Create a surface view and insert it into the content frame, if there is one.
-
-        /*
-        if (mFrameLayout != null && mSurfaceType != SURFACE_TYPE_NONE) {
-            Log.d(TAG, "setPlayerLayoutFrame different than null");
-            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            mSurfaceView = mSurfaceType == SURFACE_TYPE_TEXTURE_VIEW ? new TextureView(mContext)
-                    : new SurfaceView(mContext);
-            mSurfaceView.setLayoutParams(params);
-            mFrameLayout.addView(mSurfaceView, 0);
-        } else {
-            Log.d(TAG, "setPlayerLayoutFrame surface null");
-            mSurfaceView = null;
-        }
-        */
-
         Log.d(TAG, "setPlayerFrameSurface");
         if (mSurfaceType != SURFACE_TYPE_NONE) {
             ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
@@ -538,6 +526,17 @@ public class ExoPlayer implements IVideoPlayerAPI, com.google.android.exoplayer2
         mRelativeLayout = (RelativeLayout) ((Activity) mContext).findViewById(RESOURCE_ID_RELATIVE_LAYOUT_PARENT);
         mAspectRatioFrameLayout = (AspectRatioFrameLayout) ((Activity) mContext).findViewById(RESOURCE_ID_SIMPLE_EXOPLAYER_ASPECTRATIO_FRAME);
         mFrameLayout = (FrameLayout) ((Activity) mContext).findViewById(RESOURCE_ID_SIMPLE_PLAYER_FRAME);
+
+        mFrameLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                mHeight = mFrameLayout.getMeasuredHeight();
+                if(mHeight>0) {
+                    mFrameLayout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                }
+            }
+        });
+
     }
 
     @Override

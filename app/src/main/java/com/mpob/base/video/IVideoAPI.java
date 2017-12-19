@@ -1,6 +1,7 @@
 package com.mpob.base.video;
 
 import android.content.Context;
+import android.view.GestureDetector;
 
 /**
  * Created by HOLV on 10,November,2017
@@ -43,6 +44,10 @@ public interface IVideoAPI {
     //callbacks
     interface CallBack{
 
+    }
+
+    interface VideoPlayerGestureDetector extends GestureDetector.OnGestureListener{
+        void setContext(Context context);
     }
 
 }

@@ -1,10 +1,17 @@
 package com.mpob.base.video;
 
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ProgressBar;
 
 import com.google.android.exoplayer2.util.Util;
@@ -21,20 +28,38 @@ public class VideoView extends AppCompatActivity
 
     private IVideoAPI.Presenter mIPresenter = null;
     private ProgressBar mProgressBar = null;
+    private GestureDetectorCompat mDetector = null;
+    private IVideoAPI.VideoPlayerGestureDetector mGestureDetectorListener = null;
+    private View thisView = null;
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        View decorView = getWindow().getDecorView();
-        // Hide the status bar.
-        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
-        decorView.setSystemUiVisibility(uiOptions);
-
         setContentView(R.layout.activity_video);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Window w = getWindow(); // in Activity's onCreate() for instance
+            w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        }
+
         mIPresenter = new VideoPresenter(this);
+
+        thisView = this.getWindow().getDecorView().findViewById(android.R.id.content);
+        thisView.requestFocus();
+
+        mGestureDetectorListener = new VideoGestureDetector(this);
+        mDetector = new GestureDetectorCompat(this,mGestureDetectorListener);
+        // we will use gestures where easy to hint player actions
+        thisView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                mDetector.onTouchEvent(event);
+                // Be sure to call the superclass implementation
+                return true;
+            }
+        });
 
     }
 
@@ -49,7 +74,12 @@ public class VideoView extends AppCompatActivity
         //mIPresenter = mRetainedFragment.getData();
         // Checks the orientation of the screen
         //set player to height to 230dp and width to match_parent
-        mIPresenter.configChanged((short)newConfig.orientation);
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE
+                || newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            mIPresenter.configChanged((short)newConfig.orientation);
+
+        }
+
 
     }
 
