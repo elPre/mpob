@@ -15,8 +15,8 @@ public class VideoModel implements IVideoAPI.Model {
 
     private IVideoPlayerAPI mIVideoPlayer = null;
     private String mExtension = "m3u8";
-    private Uri mUri = Uri.parse("http://crackleusiosns-vh.akamaihd.net/i/1/e/0m/cnmyb_H264_IOS_,100BR,200BR,350BR,500BR,650BR,800BR,.mp4.csmil/master.m3u8?__b__=650&__a__=off");//Uri.parse("https://demo.myparentsonboard.com/livelow/cam1.m3u8?md5=ajjFnIsHabm6eBTexGNpsg&expires=1513214266");
-            //Uri.parse("http://crackleusiosns-vh.akamaihd.net/i/1/e/0m/cnmyb_H264_IOS_,100BR,200BR,350BR,500BR,650BR,800BR,.mp4.csmil/master.m3u8?__b__=650&__a__=off");
+    private Uri mUri = Uri.parse("https://nasa-i.akamaihd.net/hls/live/253565/NASA-NTV1-Public/master.m3u8");
+
 
     public VideoModel(Context context) {
         mIVideoPlayer = new ExoPlayer(context);

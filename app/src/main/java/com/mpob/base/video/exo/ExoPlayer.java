@@ -122,6 +122,8 @@ public class ExoPlayer implements IVideoPlayerAPI, com.google.android.exoplayer2
     private boolean mActiveMediaSourceHaveResumePosition = false;
     private boolean mShouldAutoPlay = false;
 
+    private EventLogger mEventLogger = null;
+
 
     private static final CookieManager DEFAULT_COOKIE_MANAGER;
 
@@ -368,6 +370,13 @@ public class ExoPlayer implements IVideoPlayerAPI, com.google.android.exoplayer2
         Log.d(TAG, "createAdaptiveFactory");
         mAdaptiveTrackSelectionFactory = new AdaptiveTrackSelection.Factory(BANDWIDTH_METER);
         mTrackSelector = new DefaultTrackSelector(mAdaptiveTrackSelectionFactory);
+
+        mEventLogger = new EventLogger(mTrackSelector);
+
+        mDefaultDrmSessionManagerListener = mEventLogger;
+        mAdaptiveMediaSourceEventListener = mEventLogger;
+        mExtractorMediaSourceEventListener = mEventLogger;
+
     }
 
     /**
@@ -394,6 +403,7 @@ public class ExoPlayer implements IVideoPlayerAPI, com.google.android.exoplayer2
         mResizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT;
         mMediaDataSourceFactory = buildDataSourceFactory(BANDWIDTH_METER);
         mAbrRules = new BitrateLimitingAbrStreamingRules();
+
     }
 
 
@@ -430,6 +440,9 @@ public class ExoPlayer implements IVideoPlayerAPI, com.google.android.exoplayer2
         mPlayer = ExoPlayerFactory.newSimpleInstance(mRenderersFactoryForMediaSource, mTrackSelector);
         mPlayer.addListener(this);
         mPlayer.setTextOutput(null);
+        mPlayer.addListener(mEventLogger);
+        mPlayer.setAudioDebugListener(mEventLogger);
+        mPlayer.setVideoDebugListener(mEventLogger);
         mActiveMediaSourceHaveResumePosition = mResumeWindow != C.INDEX_UNSET;
         if (mActiveMediaSourceHaveResumePosition) {
             seekTo(mResumePosition);
