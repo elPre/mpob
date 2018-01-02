@@ -8,7 +8,7 @@ import android.content.Context;
  * Santa Monica California.
  */
 
-public class VideoPresenter implements IVideoAPI.Presenter,IVideoAPI.CallBack {
+public class VideoPresenter implements IVideoAPI.Presenter {
 
     private IVideoAPI.View mView;
     private IVideoAPI.Model mModel;
@@ -27,6 +27,8 @@ public class VideoPresenter implements IVideoAPI.Presenter,IVideoAPI.CallBack {
     @Override
     public void play() {
         mView.hideProgress();
+        mView.loadRecyclerView(mModel.bingCameras());
+
         mModel.play();
     }
 
@@ -49,5 +51,10 @@ public class VideoPresenter implements IVideoAPI.Presenter,IVideoAPI.CallBack {
     @Override
     public void releasePlayerResources() {
         mModel.releasePlayerResources();
+    }
+
+    @Override
+    public void setAdapterCallBack(VideoAdapter videoAdapter) {
+        mModel.setAdapterCallBack(videoAdapter);
     }
 }

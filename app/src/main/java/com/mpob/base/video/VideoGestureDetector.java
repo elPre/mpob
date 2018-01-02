@@ -3,25 +3,24 @@ package com.mpob.base.video;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
 /**
- * Created by hectorleyvavillanueva on 12/18/17.
+ * Created by HOLV on 1,January,2018
+ * My Parents On Board,
+ * Santa Monica California.
  */
 
 public class VideoGestureDetector implements  IVideoAPI.VideoPlayerGestureDetector {
 
     private static final String TAG = VideoGestureDetector.class.getSimpleName();
     private Context mContext = null;
-    private Handler mHandler = null;
     private boolean mFlagHide = false;
 
     public VideoGestureDetector(Context context) {
         mContext = context;
-        mHandler = new Handler();
     }
 
     @Override

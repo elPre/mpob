@@ -485,6 +485,9 @@ public class ExoPlayer implements IVideoPlayerAPI, com.google.android.exoplayer2
             mPlayer.release();
             mPlayer = null;
             mTrackSelector = null;
+            mAspectRatioFrameLayout = null;
+            mFrameLayout = null;
+            mSurfaceView = null;
         }
     }
 
@@ -523,6 +526,11 @@ public class ExoPlayer implements IVideoPlayerAPI, com.google.android.exoplayer2
                 }
             } else if (mFrameLayout.getChildCount() == 0) {
                 // we definitely need one surface view
+                mSurfaceView = mSurfaceType == SURFACE_TYPE_TEXTURE_VIEW ? new TextureView(mContext)
+                        : new SurfaceView(mContext);
+                mSurfaceView.setLayoutParams(params);
+                mFrameLayout.addView(mSurfaceView, 0);
+            }else{
                 mSurfaceView = mSurfaceType == SURFACE_TYPE_TEXTURE_VIEW ? new TextureView(mContext)
                         : new SurfaceView(mContext);
                 mSurfaceView.setLayoutParams(params);

@@ -3,6 +3,10 @@ package com.mpob.base.video;
 import android.content.Context;
 import android.view.GestureDetector;
 
+import com.mpob.base.pojos.Camera;
+
+import java.util.List;
+
 /**
  * Created by HOLV on 10,November,2017
  * My Parents On Board,
@@ -15,6 +19,7 @@ public interface IVideoAPI {
     interface View{
         void showProgress();
         void hideProgress();
+        void loadRecyclerView(List<Camera> list);
     }
 
     //presenter connector
@@ -26,6 +31,7 @@ public interface IVideoAPI {
         void seekTo(long position);
         short configChanged(short portraitLandscape);
         void releasePlayerResources();
+        void setAdapterCallBack(VideoAdapter videoAdapter);
 
     }
 
@@ -38,12 +44,14 @@ public interface IVideoAPI {
         void seekTo(long position);
         void onConfigChanged(short portraitLandscape);
         void releasePlayerResources();
+        List<Camera> bingCameras();
+        void setAdapterCallBack(VideoAdapter videoAdapter);
 
     }
 
     //callbacks
     interface CallBack{
-
+        void selectCameraToPlay(Camera camera);
     }
 
     interface VideoPlayerGestureDetector extends GestureDetector.OnGestureListener{
