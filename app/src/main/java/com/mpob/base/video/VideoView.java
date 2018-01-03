@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MotionEvent;
@@ -20,6 +19,8 @@ import com.mpob.base.R;
 import com.mpob.base.pojos.Camera;
 
 import java.util.List;
+
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
 /**
  * Created by HOLV on 3,December,2017
@@ -49,7 +50,7 @@ public class VideoView extends AppCompatActivity
         mProgressBar = (ProgressBar) findViewById(R.id.activity_video_progress);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setItemAnimator(new SlideInUpAnimator());
         mRecyclerView.setHasFixedSize(true);
 
         //makes transparent the status and navigation bars
@@ -59,6 +60,7 @@ public class VideoView extends AppCompatActivity
         }
 
         mIPresenter = new VideoPresenter(this);
+        mIPresenter.init();
 
         thisView = this.getWindow().getDecorView().findViewById(R.id.activity_video_framelayout);
         thisView.requestFocus();
@@ -123,23 +125,23 @@ public class VideoView extends AppCompatActivity
         super.onStop();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (Util.SDK_INT > 23) {
-            mIPresenter.init();
-            mIPresenter.play();
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if ((Util.SDK_INT <= 23)) {
-            mIPresenter.init();
-            mIPresenter.play();
-        }
-    }
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        if (Util.SDK_INT > 23) {
+//            mIPresenter.init();
+//            mIPresenter.play();
+//        }
+//    }
+//
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        if ((Util.SDK_INT <= 23)) {
+//            mIPresenter.init();
+//            mIPresenter.play();
+//        }
+//    }
 
 
 }

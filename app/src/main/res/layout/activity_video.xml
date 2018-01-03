@@ -14,12 +14,19 @@
     <FrameLayout
         android:id="@+id/activity_video_framelayout"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="235dp"
         android:keepScreenOn="true">
         <com.google.android.exoplayer2.ui.AspectRatioFrameLayout
             android:id="@+id/activity_video_exo_player_aspect_ratio"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
+
+            <SurfaceView android:id="@+id/activity_video_surface_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"/>
+
+        </com.google.android.exoplayer2.ui.AspectRatioFrameLayout>
     </FrameLayout>
     <FrameLayout
         android:layout_width="match_parent"

@@ -21,14 +21,13 @@ public class VideoPresenter implements IVideoAPI.Presenter {
     @Override
     public void init() {
         mModel.init();
+        mView.loadRecyclerView(mModel.bingCameras());
         mView.showProgress();
     }
 
     @Override
     public void play() {
         mView.hideProgress();
-        mView.loadRecyclerView(mModel.bingCameras());
-
         mModel.play();
     }
 
