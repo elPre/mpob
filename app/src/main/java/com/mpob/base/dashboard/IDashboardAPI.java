@@ -6,7 +6,7 @@ package com.mpob.base.dashboard;
  * Santa Monica California.
  */
 
-public class IDashboardAPI {
+public interface IDashboardAPI {
 
     //view
     interface View{

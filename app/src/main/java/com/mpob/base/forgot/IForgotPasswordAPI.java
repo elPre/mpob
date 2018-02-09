@@ -6,7 +6,7 @@ package com.mpob.base.forgot;
  * Santa Monica California.
  */
 
-public class IForgotPasswordAPI {
+public interface IForgotPasswordAPI {
 
     //view
     interface View{

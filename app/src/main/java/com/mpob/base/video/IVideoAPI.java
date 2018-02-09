@@ -58,4 +58,10 @@ public interface IVideoAPI {
         void setContext(Context context);
     }
 
+
+    interface ModelListener{
+        void showSpinner();
+        void hideSpinner();
+    }
+
 }

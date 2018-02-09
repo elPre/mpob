@@ -14,6 +14,7 @@ public class Camera {
     private String cameraName;
     private String cameraDescription;
     private Drawable pictureCamera;
+    private String extension;
 
     public Drawable getPictureCamera() {
         return pictureCamera;
@@ -47,11 +48,20 @@ public class Camera {
         this.cameraDescription = cameraDescription;
     }
 
+    public String getExtension() {
+        return extension;
+    }
+
+    public void setExtension(String extension) {
+        this.extension = extension;
+    }
+
     public static class Builder {
         private String cameraUrl;
         private String cameraName;
         private String cameraDescription;
         private Drawable pictureCamera;
+        private String extension;
 
         public Builder url(String url){
             this.cameraUrl = url;
@@ -73,6 +83,11 @@ public class Camera {
             return this;
         }
 
+        public Builder extension(String extension) {
+            this.extension = extension;
+            return this;
+        }
+
         public Camera build() {
             return new Camera(this);
         }
@@ -84,6 +99,7 @@ public class Camera {
         this.cameraName = builder.cameraName;
         this.cameraDescription = builder.cameraDescription;
         this.cameraUrl = builder.cameraUrl;
+        this.extension = builder.extension;
     }
 
 

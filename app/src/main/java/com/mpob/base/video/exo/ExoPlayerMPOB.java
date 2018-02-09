@@ -11,7 +11,6 @@ import android.view.SurfaceView;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
@@ -52,6 +51,7 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
+import com.google.android.exoplayer2.source.hls.DefaultHlsDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.mpob.base.R;
 import com.mpob.base.video.IVideoAPI;
@@ -85,11 +85,6 @@ public class ExoPlayerMPOB implements IVideoPlayerAPI,EventListener{
     private final int SURFACE_TYPE_NONE = 0;
     private final int SURFACE_TYPE_SURFACE_VIEW = 1;
     private final int SURFACE_TYPE_TEXTURE_VIEW = 2;
-    private final String DRM_SCHEME_LABEL_WIDEVINE = "widevine";
-    private final String DRM_SCHEME_LABEL_PLAYREADY = "playready";
-    private final String DRM_SCHEME_LABEL_CENC = "cenc";
-    private final String DRM_SCHEME_UUID_EXTRA = "drm_scheme_uuid";
-    private final String DRM_LICENSE_URL_EXTRA = "drm_license_url";
     private final String UNKNOWN_DRM_UUID_TYPE = "00000000-0000-0000-0000-000000000000";
 
     private AspectRatioFrameLayout mAspectRatioFrameLayout = null;
@@ -129,6 +124,8 @@ public class ExoPlayerMPOB implements IVideoPlayerAPI,EventListener{
     private IVideoAPI.CallBack mCallBackShowHideProgress = null;
     private boolean mFlagHeightSize = false;
 
+    private IExoPlayerMPOBListener mPlayerExoListener = null;
+    private PlayerEnum mPlayerEnum = null;
 
     private static final CookieManager DEFAULT_COOKIE_MANAGER;
 
@@ -141,6 +138,10 @@ public class ExoPlayerMPOB implements IVideoPlayerAPI,EventListener{
         this.mContext = context;
     }
 
+    public ExoPlayerMPOB(Context context, IExoPlayerMPOBListener listener) {
+        this.mContext = context;
+        this.mPlayerExoListener = listener;
+    }
 
     //#################################################################################################
     //#################################################################################################
@@ -446,6 +447,7 @@ public class ExoPlayerMPOB implements IVideoPlayerAPI,EventListener{
         mPlayer.addListener(this);
         mPlayer.setTextOutput(null);
         mPlayer.addListener(mEventLogger);
+        //mPlayer.setVideoListener(new ComponentListenerInternal());
         mPlayer.setAudioDebugListener(mEventLogger);
         mPlayer.setVideoDebugListener(mEventLogger);
         mActiveMediaSourceHaveResumePosition = mResumeWindow != C.INDEX_UNSET;
@@ -548,6 +550,13 @@ public class ExoPlayerMPOB implements IVideoPlayerAPI,EventListener{
         mFrameLayout = (FrameLayout) ((Activity) mContext).findViewById(RESOURCE_ID_SIMPLE_PLAYER_FRAME);
         mSurfaceView = (SurfaceView) ((Activity) mContext).findViewById(R.id.activity_video_surface_view);
         mHeight = mFrameLayout.getMeasuredHeight();
+        mHeight = mContext.getResources().getInteger(R.integer.height_video_frame);
+        Log.d(TAG,"holv height"+mHeight);
+        
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT, mHeight);
+        mFrameLayout.setLayoutParams(params);
+
 
     }
 
@@ -572,15 +581,19 @@ public class ExoPlayerMPOB implements IVideoPlayerAPI,EventListener{
         switch (playbackState) {
             case ExoPlayer.STATE_BUFFERING:
                 sb.append("buffering");
+                mPlayerExoListener.sendMessage(PlayerEnum.BUFFERING);
                 break;
             case ExoPlayer.STATE_ENDED:
                 sb.append("ended");
+                mPlayerExoListener.sendMessage(PlayerEnum.ENDED);
                 break;
             case ExoPlayer.STATE_IDLE:
                 sb.append("idle");
+                mPlayerExoListener.sendMessage(PlayerEnum.IDLE);
                 break;
             case ExoPlayer.STATE_READY:
                 sb.append("ready");
+                mPlayerExoListener.sendMessage(PlayerEnum.READY);
                 break;
             default:
                 sb.append("unknown");
@@ -620,4 +633,6 @@ public class ExoPlayerMPOB implements IVideoPlayerAPI,EventListener{
     public String getExtension() {
         return mExtension;
     }
+
+
 }
