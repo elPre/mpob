@@ -152,8 +152,6 @@ public class VideoView extends AppCompatActivity
                 mIPresenter.init();
                 mIPresenter.play();
             }
-
-            Log.d(TAG, "onStart");
         }
     }
 
@@ -161,9 +159,10 @@ public class VideoView extends AppCompatActivity
     public void onResume() {
         super.onResume();
         if ((Util.SDK_INT <= 23)) {
-            //mIPresenter.init();
-            //mIPresenter.play();
-            Log.d(TAG, "onResume");
+            if (mIsPlaying) {
+                mIPresenter.init();
+                mIPresenter.play();
+            }
         }
     }
 
