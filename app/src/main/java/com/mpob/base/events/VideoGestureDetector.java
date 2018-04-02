@@ -1,4 +1,4 @@
-package com.mpob.base.video;
+package com.mpob.base.events;
 
 
 import android.app.Activity;
@@ -8,16 +8,17 @@ import android.view.MotionEvent;
 import android.view.View;
 
 /**
- * Created by HOLV on 1,January,2018
+ * Created by HOLV on 23,February,2018
  * My Parents On Board,
  * Santa Monica California.
  */
 
-public class VideoGestureDetector implements IVideoAPI.VideoPlayerGestureDetector {
+public class VideoGestureDetector implements  ISpecialEventsAPI.VideoPlayerGestureDetector {
 
     private static final String TAG = VideoGestureDetector.class.getSimpleName();
     private Context mContext = null;
     private boolean mFlagHide = false;
+    private IVideoPlayerAPI mIVideoPlayerAPI = null;
 
     public VideoGestureDetector(Context context) {
         mContext = context;
@@ -69,6 +70,11 @@ public class VideoGestureDetector implements IVideoAPI.VideoPlayerGestureDetecto
 
     }
 
+    @Override
+    public void setPlayerInterface(IVideoPlayerAPI playerInterface) {
+        mIVideoPlayerAPI = playerInterface;
+    }
+
     // This snippet hides the system bars.
     private void hideSystemUI() {
         // Set the IMMERSIVE flag.
@@ -80,6 +86,7 @@ public class VideoGestureDetector implements IVideoAPI.VideoPlayerGestureDetecto
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
                         | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
                         | View.SYSTEM_UI_FLAG_IMMERSIVE);
+        mIVideoPlayerAPI.hideControls();
     }
 
     // This snippet shows the system bars. It does this by removing all the flags
@@ -88,6 +95,7 @@ public class VideoGestureDetector implements IVideoAPI.VideoPlayerGestureDetecto
         ((Activity) mContext).getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        mIVideoPlayerAPI.showControls();
     }
 
 }

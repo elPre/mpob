@@ -1,4 +1,4 @@
-package com.mpob.base.video;
+package com.mpob.base.events;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -16,7 +16,7 @@ import com.mpob.base.pojos.Camera;
 import java.util.List;
 
 /**
- * Created by HOLV on 1,January,2018
+ * Created by HOLV on 23,February,2018
  * My Parents On Board,
  * Santa Monica California.
  */
@@ -27,14 +27,14 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
 
     private Context context = null;
     private List<Camera> list = null;
-    private IVideoAPI.CallBack callBack = null;
+    private ISpecialEventsAPI.CallBack callBack = null;
 
     public VideoAdapter(Context context, List<Camera> list){
         this.context = context;
         this.list = list;
     }
 
-    public void setCallBack(VideoModel model) {
+    public void setCallBack(SpecialEventsModel model) {
         callBack = model;
     }
 
@@ -66,7 +66,6 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
             cameraThumbnail = (ImageView) itemView.findViewById(R.id.video_rv_image_view);
             cameraName = (TextView) itemView.findViewById(R.id.video_rv_camera_name);
             cameraDescription = (TextView) itemView.findViewById(R.id.video_rv_camera_description);
-
         }
 
         public void bindCamera(Camera camera) {

@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.mpob.base.R;
 import com.mpob.base.dashboard.DashboardView;
-import com.mpob.base.forgot.ForgotView;
 import com.mpob.base.pojos.User;
 import com.mpob.base.utils.Utils;
 

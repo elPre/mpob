@@ -44,7 +44,7 @@ public interface IVideoAPI {
         void seekTo(long position);
         void onConfigChanged(short portraitLandscape);
         void releasePlayerResources();
-        List<Camera> bingCameras();
+        List<Camera> bringCameras();
         void setAdapterCallBack(VideoAdapter videoAdapter);
 
     }

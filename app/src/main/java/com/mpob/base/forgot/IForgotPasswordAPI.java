@@ -16,7 +16,7 @@ public interface IForgotPasswordAPI {
 
     //presenter connector
     interface Presenter{
-        void login(String user, String pass);
+        void forgotPassword(String user, String pass);
     }
 
     //model bring all the info alive

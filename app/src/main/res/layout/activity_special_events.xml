@@ -1,25 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_video_relativelayout_parent"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginLeft="5dp"
-    android:layout_marginRight="5dp"
-    android:layout_marginBottom="20dp"
-    android:layout_marginTop="20dp">
+    android:layout_height="match_parent">
 
 
-    <TextView
-        android:id="@+id/dashboard_activity_header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:text="@string/special_event_layout_header"
-        android:layout_centerInParent="true"
-        android:textSize="30sp"
-        android:layout_marginBottom="12dp"/>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/activity_special_events_relative_layout"
+        android:background="#000">
+
+        <ProgressBar
+            android:id="@+id/activity_video_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:translationZ="@dimen/spinner_z_index"
+            android:indeterminateDrawable="@drawable/progress"/>
+
+        <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+            android:id="@+id/activity_special_event_simple_exo_player_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <FrameLayout
+            android:id="@+id/transparent_layout_test"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/activity_special_events_on_touch"
+            android:drawable="@android:color/transparent"
+            android:background="@android:color/transparent"/>
 
 
+    </FrameLayout>
 
 
-</RelativeLayout>
+</FrameLayout>

@@ -19,7 +19,7 @@ public class LoginModel implements ILoginAPI.Model {
                 callBack.onSuccess();
 
             }
-        }, 0L);
+        }, 2000L);
 
     }
 }

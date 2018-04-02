@@ -3,8 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="40dp"
-    android:layout_marginRight="40dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
     android:layout_marginBottom="20dp"
     android:layout_marginTop="20dp">
 
@@ -16,8 +16,34 @@
         android:layout_alignParentTop="true"
         android:text="@string/forgot_password_layout_header"
         android:layout_centerInParent="true"
-        android:textSize="30sp"
-        android:layout_marginBottom="12dp"/>
+        android:textSize="@dimen/activity_header_title"
+        android:layout_marginBottom="@dimen/margin_bottom"/>
+
+
+    <EditText
+        android:id="@+id/forgot_activity_mail"
+        android:inputType="textEmailAddress"
+        android:textAlignment="center"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/edittext_selector"
+        android:layout_below="@id/forgot_activity_header"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
+        android:hint="@string/email"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/forgot_activity_btn"
+        style="@style/BtnStyle"
+        android:text="@string/send_button"
+        android:layout_below="@id/forgot_activity_mail"
+        android:layout_centerInParent="true"/>
+
 
 
 </RelativeLayout>

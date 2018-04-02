@@ -1,71 +1,79 @@
 package com.mpob.base.events;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
 import com.mpob.base.R;
-import com.mpob.base.dashboard.DashboardView;
-import com.mpob.base.forgot.ForgotView;
-import com.mpob.base.utils.Utils;
+import com.mpob.base.pojos.Camera;
+
+import java.util.List;
 
 /**
- * Created by HOLV on 10,November,2017
+ * Created by HOLV on 23,February,2018
  * My Parents On Board,
  * Santa Monica California.
  */
 
 public class SpecialEventsView extends AppCompatActivity
-        implements ISpecialEventsAPI.View, View.OnClickListener  {
+        implements ISpecialEventsAPI.View {
 
-    private EditText mEmail = null;
-    private EditText mPassword = null;
-    private TextView mForgotPassword = null;
-    private Button mButton = null;
-    private ProgressBar mProgressBar = null;
     private ISpecialEventsAPI.Presenter mIPresenter = null;
-
+    private RecyclerView mRecyclerView = null;
+    private VideoAdapter mVideoAdapter = null;
+    private boolean mIsLoadedList = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_special_events);
+        setContentView(R.layout.activity_special_events_recycler_view);
+        mRecyclerView = (RecyclerView) findViewById(R.id.activity_special_event_recycler_view);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setHasFixedSize(true);
 
-    }
-
-    @Override
-    public void showProgress() {
-        mProgressBar.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void hideProgress() {
-        mProgressBar.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.login_activity_btn:
-                mIPresenter.login(Utils.getETData(mEmail), Utils.getETData(mPassword));
-                break;
-            case R.id.login_activity_link_forgot:
-                startActivity(new Intent(SpecialEventsView.this,ForgotView.class));
-                break;
-            default:
-                throw new IllegalStateException();
+        if (!mIsLoadedList) {
+            mIPresenter = new SpecialEventsPresenter(this);
+            mIPresenter.init();
+            mIsLoadedList = true;
         }
+
     }
 
 
+    // This callback is called only when there is a saved instance previously saved using
+    // onSaveInstanceState(). We restore some state in onCreate() while we can optionally restore
+    // other state here, possibly usable after onStart() has completed.
+    // The savedInstanceState Bundle is same as the one used in onCreate().
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        mIsLoadedList = savedInstanceState.getBoolean("isPlaying");
+    }
+
+    // invoked when the activity may be temporarily destroyed, save the instance state here
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean("isPlaying", mIsLoadedList);
+        // call superclass to save any view hierarchy
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void showProgress() {}
+
+    @Override
+    public void hideProgress() {}
+
+    @Override
+    public void loadRecyclerView(List<Camera> list) {
+        mVideoAdapter = new VideoAdapter(getApplicationContext(), list);
+        mIPresenter.setAdapterCallBack(mVideoAdapter);
+        mRecyclerView.setAdapter(mVideoAdapter);
+    }
 
 
 }

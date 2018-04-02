@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     style="?android:listSeparatorTextViewStyle"
-    android:background="?android:attr/selectableItemBackground">
+    android:background="@drawable/custom_bg">
 
     <ImageView
         android:id="@+id/video_rv_image_view"

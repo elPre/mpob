@@ -2,4 +2,9 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="activity_special_events_on_touch">150dp</dimen>
+    <dimen name="spinner_z_index">5dp</dimen>
+    <dimen name="margin_bottom">12dp</dimen>
+    <dimen name="activity_header_title">30sp</dimen>
+
 </resources>

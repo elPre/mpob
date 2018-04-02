@@ -11,8 +11,8 @@ import android.content.Context;
 public class VideoPresenter implements
         IVideoAPI.Presenter, IVideoAPI.ModelListener {
 
-    private IVideoAPI.View mView;
-    private IVideoAPI.Model mModel;
+    private IVideoAPI.View mView = null;
+    private IVideoAPI.Model mModel = null;
 
     public VideoPresenter(IVideoAPI.View view) {
         mView = view;
@@ -21,7 +21,7 @@ public class VideoPresenter implements
 
     @Override
     public void init() {
-        mView.loadRecyclerView(mModel.bingCameras());
+        mView.loadRecyclerView(mModel.bringCameras());
         mView.showProgress();
     }
 

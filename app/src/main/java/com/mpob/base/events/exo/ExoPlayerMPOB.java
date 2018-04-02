@@ -1,4 +1,4 @@
-package com.mpob.base.video.exo;
+package com.mpob.base.events.exo;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,9 +10,6 @@ import android.util.Log;
 import android.view.SurfaceView;
 import android.view.TextureView;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
@@ -45,7 +42,7 @@ import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
-import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
@@ -53,8 +50,7 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.Util;
 import com.mpob.base.R;
-import com.mpob.base.video.IVideoAPI;
-import com.mpob.base.video.IVideoPlayerAPI;
+import com.mpob.base.events.IVideoPlayerAPI;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
@@ -63,9 +59,8 @@ import java.util.HashMap;
 import java.util.UUID;
 
 
-
 /**
- * Created by HOLV on 30,November,2017
+ * Created by HOLV on 21,February,2087
  * My Parents On Board,
  * Santa Monica California.
  */
@@ -74,21 +69,11 @@ public class ExoPlayerMPOB implements IVideoPlayerAPI,EventListener{
 
     private final String TAG = ExoPlayerMPOB.class.getName();
 
-    private static final int RESOURCE_ID_SIMPLE_PLAYER_FRAME = R.id.activity_video_framelayout;
-    private static final int RESOURCE_ID_SIMPLE_EXOPLAYER_ASPECTRATIO_FRAME = R.id.activity_video_exo_player_aspect_ratio;
-    private static final int RESOURCE_ID_RELATIVE_LAYOUT_PARENT = R.id.activity_video_relativelayout_parent;
-    private static final int LANDSCAPE_MODE = 2;
-
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
-    private final long DURATION_UNKNOWN = 0;
-    private final int SURFACE_TYPE_NONE = 0;
-    private final int SURFACE_TYPE_SURFACE_VIEW = 1;
-    private final int SURFACE_TYPE_TEXTURE_VIEW = 2;
-    private final String UNKNOWN_DRM_UUID_TYPE = "00000000-0000-0000-0000-000000000000";
 
-    private AspectRatioFrameLayout mAspectRatioFrameLayout = null;
-    private FrameLayout mFrameLayout = null;
-    private RelativeLayout mRelativeLayout = null;
+    private final int SURFACE_TYPE_SURFACE_VIEW = 1;
+
+    private final String UNKNOWN_DRM_UUID_TYPE = "00000000-0000-0000-0000-000000000000";
 
     private SimpleExoPlayer mPlayer = null;
     private Context mContext = null;
@@ -98,7 +83,6 @@ public class ExoPlayerMPOB implements IVideoPlayerAPI,EventListener{
     private DefaultRenderersFactory mRenderersFactoryForMediaSource = null;
     private DataSource.Factory mMediaDataSourceFactory = null;
     private DrmSessionManager<FrameworkMediaCrypto> mDrmSessionManager = null;
-    private UUID mDrmSchemeUuid = null;
     private View mSurfaceView = null;
     private Handler mMainHandler = null;
     private String mUserAgent = null;
@@ -106,27 +90,19 @@ public class ExoPlayerMPOB implements IVideoPlayerAPI,EventListener{
     private AdaptiveMediaSourceEventListener mAdaptiveMediaSourceEventListener = null;
     private TrackSelection.Factory mAdaptiveTrackSelectionFactory = null;
     private ExtractorMediaSource.EventListener mExtractorMediaSourceEventListener = null;
-    private BitrateLimitingAbrStreamingRules mAbrRules = null;
     private Uri mUri = null;
     private String mExtension = null;
-
     private int mResumeWindow = 0;
     private long mResumePosition = 0;
-    private int mResizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT;
-    private int mSurfaceType = SURFACE_TYPE_SURFACE_VIEW;
-    private int mHeight = 0;
-
     private boolean mActiveMediaSourceHaveResumePosition = false;
-    private boolean mShouldAutoPlay = false;
-
     private EventLogger mEventLogger = null;
-    private IVideoAPI.CallBack mCallBackShowHideProgress = null;
-    private boolean mFlagHeightSize = false;
-
     private IExoPlayerMPOBListener mPlayerExoListener = null;
-    private PlayerEnum mPlayerEnum = null;
+    private UUID mDrmSchemeUuid = null;
+
 
     private static final CookieManager DEFAULT_COOKIE_MANAGER;
+
+    private SimpleExoPlayerView mSimpleExoPlayerView = null;
 
     static {
         DEFAULT_COOKIE_MANAGER = new CookieManager();
@@ -157,11 +133,11 @@ public class ExoPlayerMPOB implements IVideoPlayerAPI,EventListener{
             createAdaptiveFactory();
             createRenderFactory();
             setUpMediaSource(getUri(), getExtension());
+            createFrameLayoutAndAspectRatio();
             createNewPlayer();
             clearResumePosition();
-            createFrameLayoutAndAspectRatio();
-            setPlayerLayoutFrame();
-            resetViewSurface();
+
+            //resetViewSurface();
         } else {
             Log.d(TAG, "start from the frame was stopped");
         }
@@ -195,26 +171,25 @@ public class ExoPlayerMPOB implements IVideoPlayerAPI,EventListener{
     @Override
     public void onConfigurationChanged(short portraitLandscape) {
 
-        Log.d(TAG, "onConfigurationChanged " + portraitLandscape);
-        RelativeLayout.LayoutParams params;
-        if (mFrameLayout == null) {
-            return;
-        }
-
-        if (portraitLandscape == LANDSCAPE_MODE) {
-            params = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.MATCH_PARENT,
-                    RelativeLayout.LayoutParams.MATCH_PARENT);
-        } else{
-            params = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.MATCH_PARENT, mHeight);
-        }
-        mFrameLayout.setLayoutParams(params);
     }
 
     @Override
     public void releasePlayerResources() {
         releasePlayer();
+    }
+
+    @Override
+    public void showControls() {
+        if (mSimpleExoPlayerView != null) {
+            mSimpleExoPlayerView.showController();
+        }
+    }
+
+    @Override
+    public void hideControls() {
+        if (mSimpleExoPlayerView != null) {
+            mSimpleExoPlayerView.hideController();
+        }
     }
 
     //#################################################################################################
@@ -403,11 +378,8 @@ public class ExoPlayerMPOB implements IVideoPlayerAPI,EventListener{
         if (CookieHandler.getDefault() != DEFAULT_COOKIE_MANAGER) {
             CookieHandler.setDefault(DEFAULT_COOKIE_MANAGER);
         }
-        mShouldAutoPlay = true;
         mMainHandler = new Handler();
-        mResizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT;
         mMediaDataSourceFactory = buildDataSourceFactory(BANDWIDTH_METER);
-        mAbrRules = new BitrateLimitingAbrStreamingRules();
     }
 
 
@@ -445,7 +417,6 @@ public class ExoPlayerMPOB implements IVideoPlayerAPI,EventListener{
         mPlayer.addListener(this);
         mPlayer.setTextOutput(null);
         mPlayer.addListener(mEventLogger);
-        //mPlayer.setVideoListener(new ComponentListenerInternal());
         mPlayer.setAudioDebugListener(mEventLogger);
         mPlayer.setVideoDebugListener(mEventLogger);
         mActiveMediaSourceHaveResumePosition = mResumeWindow != C.INDEX_UNSET;
@@ -454,6 +425,7 @@ public class ExoPlayerMPOB implements IVideoPlayerAPI,EventListener{
         }
         boolean haveResumePosition = mResumeWindow != C.INDEX_UNSET;
         mPlayer.prepare(mActiveMediaSource, !haveResumePosition, false);
+        mSimpleExoPlayerView.setPlayer(mPlayer);
     }
 
     /**
@@ -470,6 +442,7 @@ public class ExoPlayerMPOB implements IVideoPlayerAPI,EventListener{
      * that is where the video is rendered
      */
     private void resetViewSurface() {
+
         if (mPlayer != null) {
             Log.d(TAG, "resetViewSurface");
             if (mSurfaceView instanceof TextureView) {
@@ -485,12 +458,10 @@ public class ExoPlayerMPOB implements IVideoPlayerAPI,EventListener{
 
     private void releasePlayer() {
         if (mPlayer != null) {
-            mShouldAutoPlay = mPlayer.getPlayWhenReady();
             updateResumePosition();
             mPlayer.release();
             mPlayer = null;
             mTrackSelector = null;
-
         }
     }
 
@@ -505,58 +476,10 @@ public class ExoPlayerMPOB implements IVideoPlayerAPI,EventListener{
     }
 
 
-    /**
-     *
-     */
-    private void setPlayerLayoutFrame() {
-        // Create a surface view and insert it into the content frame, if there is one.
-        Log.d(TAG, "setPlayerFrameSurface");
-        if (mSurfaceType != SURFACE_TYPE_NONE) {
-            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            if (mFrameLayout.getChildCount() == 1) {
-                // might be an existing surface view
-                View framelayoutChild = mFrameLayout.getChildAt(0);
-                if (framelayoutChild instanceof SurfaceView) {
-                    // good news we dont need a new one!
-                    Log.d(TAG, "setPlayerFramneSurface found existing surface view");
-                } else {
-                    // we need one
-                    mSurfaceView = mSurfaceType == SURFACE_TYPE_TEXTURE_VIEW ? new TextureView(mContext)
-                            : new SurfaceView(mContext);
-                    mSurfaceView.setLayoutParams(params);
-                    mFrameLayout.addView(mSurfaceView, 0);
-                }
-            } else if (mFrameLayout.getChildCount() == 0) {
-                // we definitely need one surface view
-                mSurfaceView = mSurfaceType == SURFACE_TYPE_TEXTURE_VIEW ? new TextureView(mContext)
-                        : new SurfaceView(mContext);
-                mSurfaceView.setLayoutParams(params);
-                mFrameLayout.addView(mSurfaceView, 0);
-            }
-        } else {
-            mSurfaceView = null;
-        }
-
-
-    }
-
     private void createFrameLayoutAndAspectRatio() {
         Log.d(TAG, "createFrameLayoutAndAspectRatio");
-        mRelativeLayout = (RelativeLayout) ((Activity) mContext).findViewById(RESOURCE_ID_RELATIVE_LAYOUT_PARENT);
-        mAspectRatioFrameLayout = (AspectRatioFrameLayout) ((Activity) mContext).findViewById(RESOURCE_ID_SIMPLE_EXOPLAYER_ASPECTRATIO_FRAME);
-        mFrameLayout = (FrameLayout) ((Activity) mContext).findViewById(RESOURCE_ID_SIMPLE_PLAYER_FRAME);
-        mSurfaceView = (SurfaceView) ((Activity) mContext).findViewById(R.id.activity_video_surface_view);
-        mHeight = mFrameLayout.getMeasuredHeight();
-        if (mHeight == 0) {
-            mHeight = mContext.getResources().getInteger(R.integer.height_video_frame);
-        }
-        
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.MATCH_PARENT, mHeight);
-        mFrameLayout.setLayoutParams(params);
-
-
+        mSimpleExoPlayerView = (SimpleExoPlayerView) ((Activity) mContext).findViewById(R.id.activity_special_event_simple_exo_player_view);
+        mSimpleExoPlayerView.requestFocus();
     }
 
     @Override
@@ -576,22 +499,29 @@ public class ExoPlayerMPOB implements IVideoPlayerAPI,EventListener{
 
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+        StringBuilder sb = new StringBuilder();
         switch (playbackState) {
             case ExoPlayer.STATE_BUFFERING:
+                sb.append("buffering");
                 mPlayerExoListener.sendMessage(PlayerEnum.BUFFERING);
                 break;
             case ExoPlayer.STATE_ENDED:
+                sb.append("ended");
                 mPlayerExoListener.sendMessage(PlayerEnum.ENDED);
                 break;
             case ExoPlayer.STATE_IDLE:
+                sb.append("idle");
                 mPlayerExoListener.sendMessage(PlayerEnum.IDLE);
                 break;
             case ExoPlayer.STATE_READY:
+                sb.append("ready");
                 mPlayerExoListener.sendMessage(PlayerEnum.READY);
                 break;
             default:
+                sb.append("unknown");
                 break;
         }
+        Log.d(TAG, sb.toString());
     }
 
     @Override

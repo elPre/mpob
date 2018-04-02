@@ -58,7 +58,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:visibility="gone"
-        android:translationZ="10dp"
+        android:translationZ="@dimen/spinner_z_index"
         android:indeterminateDrawable="@drawable/progress" />
 
     <TextView
