@@ -94,67 +94,137 @@ public class SpecialEventsModel implements
 
 
         list.add(new Camera.Builder().picture(mContext.getResources().getDrawable(R.drawable.thumb_bunny))
-                .name("Name Video 1")
-                .description("Description VOD 1")
-                .url("http://demo.myparentsonboard.com/ondemand/04313bb7-203f-4c96-b8fc-ab17342cdb96.mp4?md5=moIPekTyQ9anvdFHGKzT6A&expires=1522647349")
-                .thumbnail("http://demo.myparentsonboard.com/ondemand/04313bb7-203f-4c96-b8fc-ab17342cdb96.jpg?md5=DE01AuXgliqvgOmGnxJcig&expires=1522647349")
-                .extension("mp4")
+                .name("Live Streaming")
+                .description("Description Camera WITH AAC")
+                .url("https://devstreaming-cdn.apple.com/videos/streaming/examples/bipbop_4x3/gear1/prog_index.m3u8")
+                .thumbnail("http://demo.myparentsonboard.com/Thumbnails/Thumb_Cam1.jpg?md5=txBnfjtAWbHDTjCjBhCoHg&expires=1522643749")
+                .extension("m3u8")
                 .build());
 
         list.add(new Camera.Builder().picture(mContext.getResources().getDrawable(R.drawable.thumb_bunny))
-                .name("Name Video 1")
-                .description("Description VOD 1")
-                .url("http://demo.myparentsonboard.com/ondemand/09cef70c-71b6-46c9-a219-f297469f7010.mp4?md5=xbIBw78Y2BjxLXbhZUe1iw&expires=1522647349")
-                .thumbnail("http://demo.myparentsonboard.com/ondemand/09cef70c-71b6-46c9-a219-f297469f7010.jpg?md5=Kh8f66sCGUQ7y9K0a8IFgw&expires=1522647349")
-                .extension("mp4")
+                .name("Live Streaming")
+                .description("Live Streaming 3 AAC")
+                .url("https://tungsten.aaplimg.com/VOD/bipbop_adv_example_v2/master.m3u8")
+                .thumbnail("http://demo.myparentsonboard.com/Thumbnails/Thumb_Cam2.jpg?md5=DDOW0luTQBjltCtbQml9Eg&expires=1522643749")
+                .extension("m3u8")
                 .build());
 
         list.add(new Camera.Builder().picture(mContext.getResources().getDrawable(R.drawable.thumb_bunny))
-                .name("Name Video 1")
-                .description("Description VOD 1")
-                .url("http://demo.myparentsonboard.com/ondemand/10e04409-0f20-4ba4-a7ff-c6b58f957110.mp4?md5=qAzLgsPU8hHDAmDzu6Fjmg&expires=1522647349")
-                .thumbnail("http://demo.myparentsonboard.com/ondemand/10e04409-0f20-4ba4-a7ff-c6b58f957110.jpg?md5=zl60VNGl87evNMcVTTHotg&expires=1522647349")
-                .extension("mp4")
+                .name("Live Streaming 4 AAC")
+                .description("Live Streaming 4 AAC")
+                .url("http://demo.myparentsonboard.com/livelow/cam3.m3u8?md5=rI2Afong2JBaTcZWhWP5pA&expires=1522643749")
+                .thumbnail("http://demo.myparentsonboard.com/Thumbnails/Thumb_Cam3.jpg?md5=h5JH3c_hSRq4Up2vOQ66rg&expires=1522643749")
+                .extension("m3u8")
+                .build());
+
+
+        list.add(new Camera.Builder().picture(mContext.getResources().getDrawable(R.drawable.thumb_bunny))
+                .name("Live Streaming VOD AAC 1")
+                .description("Live Streaming VOD AAC 1")
+                .url("http://demo.myparentsonboard.com/livelow/cam4.m3u8?md5=fNQzw5Sx7bk2cYTmv78VjA&expires=1522643749")
+                .thumbnail("http://demo.myparentsonboard.com/Thumbnails/Thumb_Cam4.jpg?md5=4uGe8ejEp-bXoGyBPQlQ3A&expires=1522643749")
+                .extension("m3u8")
+                .build());
+
+
+        list.add(new Camera.Builder().picture(mContext.getResources().getDrawable(R.drawable.thumb_bunny))
+                .name("Live Streaming")
+                .description("Description Camera WITH AAC")
+                .url("http://demo.myparentsonboard.com/livelow/cam1.m3u8?md5=grQlnqN5ClUvpuMqGj9BKg&expires=1522643749")
+                .thumbnail("http://demo.myparentsonboard.com/Thumbnails/Thumb_Cam1.jpg?md5=txBnfjtAWbHDTjCjBhCoHg&expires=1522643749")
+                .extension("m3u8")
                 .build());
 
         list.add(new Camera.Builder().picture(mContext.getResources().getDrawable(R.drawable.thumb_bunny))
-                .name("Name Video 1")
-                .description("Description VOD 1")
-                .url("http://demo.myparentsonboard.com/ondemand/37fe202e-e891-4a0e-a165-1c909f95f8cf.mp4?md5=jXxFkwBREUoInJunK92gcg&expires=1522647349")
-                .thumbnail("http://demo.myparentsonboard.com/ondemand/37fe202e-e891-4a0e-a165-1c909f95f8cf.jpg?md5=h-Abv77Y9GMCSZIU_MvWQQ&expires=1522647349")
-                .extension("mp4")
+                .name("Live Streaming")
+                .description("Live Streaming 3 AAC")
+                .url("http://demo.myparentsonboard.com/livelow/cam2.m3u8?md5=Yqz02m12mSIwJAHzR7JMVA&expires=1522643749")
+                .thumbnail("http://demo.myparentsonboard.com/Thumbnails/Thumb_Cam2.jpg?md5=DDOW0luTQBjltCtbQml9Eg&expires=1522643749")
+                .extension("m3u8")
                 .build());
 
         list.add(new Camera.Builder().picture(mContext.getResources().getDrawable(R.drawable.thumb_bunny))
-                .name("Name Video 1")
-                .description("Description VOD 1")
-                .url("http://demo.myparentsonboard.com/ondemand/5219e5fa-e73e-4863-837f-e56ea037d375.mp4?md5=VrZxNFRqlh_a6980eCNG8g&expires=1522647349")
-                .thumbnail("http://demo.myparentsonboard.com/ondemand/5219e5fa-e73e-4863-837f-e56ea037d375.jpg?md5=oQmudqGibO6L_MiwBpThPg&expires=1522647349")
-                .extension("mp4")
+                .name("Live Streaming 4 AAC")
+                .description("Live Streaming 4 AAC")
+                .url("http://demo.myparentsonboard.com/livelow/cam3.m3u8?md5=rI2Afong2JBaTcZWhWP5pA&expires=1522643749")
+                .thumbnail("http://demo.myparentsonboard.com/Thumbnails/Thumb_Cam3.jpg?md5=h5JH3c_hSRq4Up2vOQ66rg&expires=1522643749")
+                .extension("m3u8")
+                .build());
+
+
+        list.add(new Camera.Builder().picture(mContext.getResources().getDrawable(R.drawable.thumb_bunny))
+                .name("Live Streaming VOD AAC 1")
+                .description("Live Streaming VOD AAC 1")
+                .url("http://demo.myparentsonboard.com/livelow/cam4.m3u8?md5=fNQzw5Sx7bk2cYTmv78VjA&expires=1522643749")
+                .thumbnail("http://demo.myparentsonboard.com/Thumbnails/Thumb_Cam4.jpg?md5=4uGe8ejEp-bXoGyBPQlQ3A&expires=1522643749")
+                .extension("m3u8")
                 .build());
 
         list.add(new Camera.Builder().picture(mContext.getResources().getDrawable(R.drawable.thumb_bunny))
-                .name("Name Video 1")
-                .description("Description VOD 1")
-                .url("http://demo.myparentsonboard.com/ondemand/b769ab3c-da37-4daa-aa1b-175f136235b3.mp4?md5=lgM9fj6tgkgcnnNc_tCHvw&expires=1522647349")
-                .thumbnail("http://demo.myparentsonboard.com/ondemand/b769ab3c-da37-4daa-aa1b-175f136235b3.jpg?md5=xdKx31ic8r5TTRl_Cx6N5Q&expires=1522647349")
-                .extension("mp4")
+                .name("Live Streaming")
+                .description("Description Camera WITH AAC")
+                .url("http://demo.myparentsonboard.com/livelow/cam1.m3u8?md5=grQlnqN5ClUvpuMqGj9BKg&expires=1522643749")
+                .thumbnail("http://demo.myparentsonboard.com/Thumbnails/Thumb_Cam1.jpg?md5=txBnfjtAWbHDTjCjBhCoHg&expires=1522643749")
+                .extension("m3u8")
                 .build());
 
         list.add(new Camera.Builder().picture(mContext.getResources().getDrawable(R.drawable.thumb_bunny))
-                .name("Name Video 1")
-                .description("Description VOD 1")
-                .url("http://demo.myparentsonboard.com/ondemand/b89ae94a-fe07-4d5e-ad4c-10f92540a870.mp4?md5=Ovd3p2vK8UOw2EEFSPDEMw&expires=1522647349")
-                .thumbnail("http://demo.myparentsonboard.com/ondemand/b89ae94a-fe07-4d5e-ad4c-10f92540a870.jpg?md5=dCoGSF-888aZ5lHUSR5uFw&expires=1522647349")
-                .extension("mp4")
+                .name("Live Streaming")
+                .description("Live Streaming 3 AAC")
+                .url("http://demo.myparentsonboard.com/livelow/cam2.m3u8?md5=Yqz02m12mSIwJAHzR7JMVA&expires=1522643749")
+                .thumbnail("http://demo.myparentsonboard.com/Thumbnails/Thumb_Cam2.jpg?md5=DDOW0luTQBjltCtbQml9Eg&expires=1522643749")
+                .extension("m3u8")
                 .build());
 
         list.add(new Camera.Builder().picture(mContext.getResources().getDrawable(R.drawable.thumb_bunny))
-                .name("Name Video 1")
-                .description("Description VOD 1")
-                .url("http://demo.myparentsonboard.com/ondemand/ce6e2b87-272c-4b08-83eb-922190c2f99e.mp4?md5=VO2-sNdjZMcyNvTqL5hCmw&expires=1522647349")
-                .thumbnail("http://demo.myparentsonboard.com/ondemand/ce6e2b87-272c-4b08-83eb-922190c2f99e.jpg?md5=1PKkR28EZPz2zMTvTKuLuA&expires=1522647349")
-                .extension("mp4")
+                .name("Live Streaming 4 AAC")
+                .description("Live Streaming 4 AAC")
+                .url("http://demo.myparentsonboard.com/livelow/cam3.m3u8?md5=rI2Afong2JBaTcZWhWP5pA&expires=1522643749")
+                .thumbnail("http://demo.myparentsonboard.com/Thumbnails/Thumb_Cam3.jpg?md5=h5JH3c_hSRq4Up2vOQ66rg&expires=1522643749")
+                .extension("m3u8")
+                .build());
+
+
+        list.add(new Camera.Builder().picture(mContext.getResources().getDrawable(R.drawable.thumb_bunny))
+                .name("Live Streaming VOD AAC 1")
+                .description("Live Streaming VOD AAC 1")
+                .url("http://demo.myparentsonboard.com/livelow/cam4.m3u8?md5=fNQzw5Sx7bk2cYTmv78VjA&expires=1522643749")
+                .thumbnail("http://demo.myparentsonboard.com/Thumbnails/Thumb_Cam4.jpg?md5=4uGe8ejEp-bXoGyBPQlQ3A&expires=1522643749")
+                .extension("m3u8")
+                .build());
+
+
+        list.add(new Camera.Builder().picture(mContext.getResources().getDrawable(R.drawable.thumb_bunny))
+                .name("Live Streaming")
+                .description("Description Camera WITH AAC")
+                .url("http://demo.myparentsonboard.com/livelow/cam1.m3u8?md5=grQlnqN5ClUvpuMqGj9BKg&expires=1522643749")
+                .thumbnail("http://demo.myparentsonboard.com/Thumbnails/Thumb_Cam1.jpg?md5=txBnfjtAWbHDTjCjBhCoHg&expires=1522643749")
+                .extension("m3u8")
+                .build());
+
+        list.add(new Camera.Builder().picture(mContext.getResources().getDrawable(R.drawable.thumb_bunny))
+                .name("Live Streaming")
+                .description("Live Streaming 3 AAC")
+                .url("http://demo.myparentsonboard.com/livelow/cam2.m3u8?md5=Yqz02m12mSIwJAHzR7JMVA&expires=1522643749")
+                .thumbnail("http://demo.myparentsonboard.com/Thumbnails/Thumb_Cam2.jpg?md5=DDOW0luTQBjltCtbQml9Eg&expires=1522643749")
+                .extension("m3u8")
+                .build());
+
+        list.add(new Camera.Builder().picture(mContext.getResources().getDrawable(R.drawable.thumb_bunny))
+                .name("Live Streaming 4 AAC")
+                .description("Live Streaming 4 AAC")
+                .url("http://demo.myparentsonboard.com/livelow/cam3.m3u8?md5=rI2Afong2JBaTcZWhWP5pA&expires=1522643749")
+                .thumbnail("http://demo.myparentsonboard.com/Thumbnails/Thumb_Cam3.jpg?md5=h5JH3c_hSRq4Up2vOQ66rg&expires=1522643749")
+                .extension("m3u8")
+                .build());
+
+
+        list.add(new Camera.Builder().picture(mContext.getResources().getDrawable(R.drawable.thumb_bunny))
+                .name("Live Streaming VOD AAC 1")
+                .description("Live Streaming VOD AAC 1")
+                .url("http://demo.myparentsonboard.com/livelow/cam4.m3u8?md5=fNQzw5Sx7bk2cYTmv78VjA&expires=1522643749")
+                .thumbnail("http://demo.myparentsonboard.com/Thumbnails/Thumb_Cam4.jpg?md5=4uGe8ejEp-bXoGyBPQlQ3A&expires=1522643749")
+                .extension("m3u8")
                 .build());
 
 

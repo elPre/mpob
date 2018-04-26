@@ -54,18 +54,57 @@ import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-/**
- * Logs player events using {@link Log}.
- */
-/* package */ final class EventLogger implements ExoPlayer.EventListener, AudioRendererEventListener,
-        VideoRendererEventListener, AdaptiveMediaSourceEventListener,
-        ExtractorMediaSource.EventListener, DefaultDrmSessionManager.EventListener,
-        MetadataRenderer.Output {
+import android.os.SystemClock;
+import android.util.Log;
+import android.view.Surface;
+import com.google.android.exoplayer2.C;
+import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.Format;
+import com.google.android.exoplayer2.PlaybackParameters;
+import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.RendererCapabilities;
+import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.audio.AudioRendererEventListener;
+import com.google.android.exoplayer2.decoder.DecoderCounters;
+import com.google.android.exoplayer2.drm.DefaultDrmSessionManager;
+import com.google.android.exoplayer2.metadata.Metadata;
+import com.google.android.exoplayer2.metadata.MetadataOutput;
+import com.google.android.exoplayer2.metadata.emsg.EventMessage;
+import com.google.android.exoplayer2.metadata.id3.ApicFrame;
+import com.google.android.exoplayer2.metadata.id3.CommentFrame;
+import com.google.android.exoplayer2.metadata.id3.GeobFrame;
+import com.google.android.exoplayer2.metadata.id3.Id3Frame;
+import com.google.android.exoplayer2.metadata.id3.PrivFrame;
+import com.google.android.exoplayer2.metadata.id3.TextInformationFrame;
+import com.google.android.exoplayer2.metadata.id3.UrlLinkFrame;
+import com.google.android.exoplayer2.metadata.scte35.SpliceCommand;
+import com.google.android.exoplayer2.source.MediaSourceEventListener;
+import com.google.android.exoplayer2.source.TrackGroup;
+import com.google.android.exoplayer2.source.TrackGroupArray;
+import com.google.android.exoplayer2.source.ads.AdsMediaSource;
+import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
+import com.google.android.exoplayer2.trackselection.MappingTrackSelector.MappedTrackInfo;
+import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
+import com.google.android.exoplayer2.upstream.DataSpec;
+import com.google.android.exoplayer2.video.VideoRendererEventListener;
+import java.io.IOException;
+import java.text.NumberFormat;
+import java.util.Locale;
+
+/** Logs events from {@link Player} and other core components using {@link Log}. */
+public class EventLogger
+        implements Player.EventListener,
+        MetadataOutput,
+        AudioRendererEventListener,
+        VideoRendererEventListener,
+        MediaSourceEventListener,
+        AdsMediaSource.EventListener,
+        DefaultDrmSessionManager.EventListener {
 
     private static final String TAG = "EventLogger";
     private static final int MAX_TIMELINE_ITEM_LINES = 3;
     private static final NumberFormat TIME_FORMAT;
-
     static {
         TIME_FORMAT = NumberFormat.getInstance(Locale.US);
         TIME_FORMAT.setMinimumFractionDigits(2);
@@ -99,8 +138,18 @@ import java.util.Locale;
     }
 
     @Override
-    public void onPositionDiscontinuity() {
-        Log.d(TAG, "positionDiscontinuity");
+    public void onRepeatModeChanged(@Player.RepeatMode int repeatMode) {
+        Log.d(TAG, "repeatMode [" + getRepeatModeString(repeatMode) + "]");
+    }
+
+    @Override
+    public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
+        Log.d(TAG, "shuffleModeEnabled [" + shuffleModeEnabled + "]");
+    }
+
+    @Override
+    public void onPositionDiscontinuity(@Player.DiscontinuityReason int reason) {
+        Log.d(TAG, "positionDiscontinuity [" + getDiscontinuityReasonString(reason) + "]");
     }
 
     @Override
@@ -110,20 +159,22 @@ import java.util.Locale;
     }
 
     @Override
-    public void onTimelineChanged(Timeline timeline, Object manifest) {
+    public void onTimelineChanged(Timeline timeline, Object manifest,
+                                  @Player.TimelineChangeReason int reason) {
         int periodCount = timeline.getPeriodCount();
         int windowCount = timeline.getWindowCount();
-        Log.d(TAG, "sourceInfo [periodCount=" + periodCount + ", windowCount=" + windowCount);
+        Log.d(TAG, "timelineChanged [periodCount=" + periodCount + ", windowCount=" + windowCount
+                + ", reason=" + getTimelineChangeReasonString(reason));
         for (int i = 0; i < Math.min(periodCount, MAX_TIMELINE_ITEM_LINES); i++) {
             timeline.getPeriod(i, period);
-            Log.d(TAG, "  " + "period [" + getTimeString(period.getDurationMs()) + "]");
+            Log.d(TAG, "  " +  "period [" + getTimeString(period.getDurationMs()) + "]");
         }
         if (periodCount > MAX_TIMELINE_ITEM_LINES) {
             Log.d(TAG, "  ...");
         }
         for (int i = 0; i < Math.min(windowCount, MAX_TIMELINE_ITEM_LINES); i++) {
             timeline.getWindow(i, window);
-            Log.d(TAG, "  " + "window [" + getTimeString(window.getDurationMs()) + ", "
+            Log.d(TAG, "  " +  "window [" + getTimeString(window.getDurationMs()) + ", "
                     + window.isSeekable + ", " + window.isDynamic + "]");
         }
         if (windowCount > MAX_TIMELINE_ITEM_LINES) {
@@ -203,7 +254,12 @@ import java.util.Locale;
         Log.d(TAG, "]");
     }
 
-    // MetadataRenderer.Output
+    @Override
+    public void onSeekProcessed() {
+        Log.d(TAG, "seekProcessed");
+    }
+
+    // MetadataOutput
 
     @Override
     public void onMetadata(Metadata metadata) {
@@ -242,7 +298,7 @@ import java.util.Locale;
     }
 
     @Override
-    public void onAudioTrackUnderrun(int bufferSize, long bufferSizeMs, long elapsedSinceLastFeedMs) {
+    public void onAudioSinkUnderrun(int bufferSize, long bufferSizeMs, long elapsedSinceLastFeedMs) {
         printInternalError("audioTrackUnderrun [" + bufferSize + ", " + bufferSizeMs + ", "
                 + elapsedSinceLastFeedMs + "]", null);
     }
@@ -309,19 +365,19 @@ import java.util.Locale;
         Log.d(TAG, "drmKeysLoaded [" + getSessionTimeString() + "]");
     }
 
-    // ExtractorMediaSource.EventListener
+    // MediaSourceEventListener
 
     @Override
-    public void onLoadError(IOException error) {
-        printInternalError("loadError", error);
-    }
-
-    // AdaptiveMediaSourceEventListener
-
-    @Override
-    public void onLoadStarted(DataSpec dataSpec, int dataType, int trackType, Format trackFormat,
-                              int trackSelectionReason, Object trackSelectionData, long mediaStartTimeMs,
-                              long mediaEndTimeMs, long elapsedRealtimeMs) {
+    public void onLoadStarted(
+            DataSpec dataSpec,
+            int dataType,
+            int trackType,
+            Format trackFormat,
+            int trackSelectionReason,
+            Object trackSelectionData,
+            long mediaStartTimeMs,
+            long mediaEndTimeMs,
+            long elapsedRealtimeMs) {
         // Do nothing.
     }
 
@@ -355,6 +411,28 @@ import java.util.Locale;
     @Override
     public void onDownstreamFormatChanged(int trackType, Format trackFormat, int trackSelectionReason,
                                           Object trackSelectionData, long mediaTimeMs) {
+        // Do nothing.
+    }
+
+    // AdsMediaSource.EventListener
+
+    @Override
+    public void onAdLoadError(IOException error) {
+        printInternalError("adLoadError", error);
+    }
+
+    @Override
+    public void onInternalAdLoadError(RuntimeException error) {
+        printInternalError("internalAdLoadError", error);
+    }
+
+    @Override
+    public void onAdClicked() {
+        // Do nothing.
+    }
+
+    @Override
+    public void onAdTapped() {
         // Do nothing.
     }
 
@@ -396,6 +474,10 @@ import java.util.Locale;
                 EventMessage eventMessage = (EventMessage) entry;
                 Log.d(TAG, prefix + String.format("EMSG: scheme=%s, id=%d, value=%s",
                         eventMessage.schemeIdUri, eventMessage.id, eventMessage.value));
+            } else if (entry instanceof SpliceCommand) {
+                String description =
+                        String.format("SCTE-35 splice command: type=%s.", entry.getClass().getSimpleName());
+                Log.d(TAG, prefix + description);
             }
         }
     }
@@ -409,8 +491,18 @@ import java.util.Locale;
     }
 
     private static String getStateString(int state) {
-        Log.d(TAG, "state is:" + state);
-        return "?";
+        switch (state) {
+            case Player.STATE_BUFFERING:
+                return "B";
+            case Player.STATE_ENDED:
+                return "E";
+            case Player.STATE_IDLE:
+                return "I";
+            case Player.STATE_READY:
+                return "R";
+            default:
+                return "?";
+        }
     }
 
     private static String getFormatSupportString(int formatSupport) {
@@ -419,6 +511,8 @@ import java.util.Locale;
                 return "YES";
             case RendererCapabilities.FORMAT_EXCEEDS_CAPABILITIES:
                 return "NO_EXCEEDS_CAPABILITIES";
+            case RendererCapabilities.FORMAT_UNSUPPORTED_DRM:
+                return "NO_UNSUPPORTED_DRM";
             case RendererCapabilities.FORMAT_UNSUPPORTED_SUBTYPE:
                 return "NO_UNSUPPORTED_TYPE";
             case RendererCapabilities.FORMAT_UNSUPPORTED_TYPE:
@@ -444,6 +538,9 @@ import java.util.Locale;
         }
     }
 
+    // Suppressing reference equality warning because the track group stored in the track selection
+    // must point to the exact track group object to be considered part of it.
+    @SuppressWarnings("ReferenceEquality")
     private static String getTrackStatusString(TrackSelection selection, TrackGroup group,
                                                int trackIndex) {
         return getTrackStatusString(selection != null && selection.getTrackGroup() == group
@@ -454,5 +551,47 @@ import java.util.Locale;
         return enabled ? "[X]" : "[ ]";
     }
 
+    private static String getRepeatModeString(@Player.RepeatMode int repeatMode) {
+        switch (repeatMode) {
+            case Player.REPEAT_MODE_OFF:
+                return "OFF";
+            case Player.REPEAT_MODE_ONE:
+                return "ONE";
+            case Player.REPEAT_MODE_ALL:
+                return "ALL";
+            default:
+                return "?";
+        }
+    }
+
+    private static String getDiscontinuityReasonString(@Player.DiscontinuityReason int reason) {
+        switch (reason) {
+            case Player.DISCONTINUITY_REASON_PERIOD_TRANSITION:
+                return "PERIOD_TRANSITION";
+            case Player.DISCONTINUITY_REASON_SEEK:
+                return "SEEK";
+            case Player.DISCONTINUITY_REASON_SEEK_ADJUSTMENT:
+                return "SEEK_ADJUSTMENT";
+            case Player.DISCONTINUITY_REASON_AD_INSERTION:
+                return "AD_INSERTION";
+            case Player.DISCONTINUITY_REASON_INTERNAL:
+                return "INTERNAL";
+            default:
+                return "?";
+        }
+    }
+
+    private static String getTimelineChangeReasonString(@Player.TimelineChangeReason int reason) {
+        switch (reason) {
+            case Player.TIMELINE_CHANGE_REASON_PREPARED:
+                return "PREPARED";
+            case Player.TIMELINE_CHANGE_REASON_RESET:
+                return "RESET";
+            case Player.TIMELINE_CHANGE_REASON_DYNAMIC:
+                return "DYNAMIC";
+            default:
+                return "?";
+        }
+    }
 
 }

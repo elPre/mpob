@@ -354,8 +354,6 @@ public class ExoPlayerMPOB implements IVideoPlayerAPI,EventListener{
         mEventLogger = new EventLogger(mTrackSelector);
 
         mDefaultDrmSessionManagerListener = mEventLogger;
-        mAdaptiveMediaSourceEventListener = mEventLogger;
-        mExtractorMediaSourceEventListener = mEventLogger;
 
     }
 
@@ -482,8 +480,9 @@ public class ExoPlayerMPOB implements IVideoPlayerAPI,EventListener{
         mSimpleExoPlayerView.requestFocus();
     }
 
+
     @Override
-    public void onTimelineChanged(Timeline timeline, Object manifest) {
+    public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
 
     }
 
@@ -525,17 +524,33 @@ public class ExoPlayerMPOB implements IVideoPlayerAPI,EventListener{
     }
 
     @Override
+    public void onRepeatModeChanged(int repeatMode) {
+
+    }
+
+    @Override
+    public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
+
+    }
+
+    @Override
     public void onPlayerError(ExoPlaybackException error) {
 
     }
 
     @Override
-    public void onPositionDiscontinuity() {
+    public void onPositionDiscontinuity(int reason) {
+
+    }
+
+
+    @Override
+    public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
 
     }
 
     @Override
-    public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
+    public void onSeekProcessed() {
 
     }
 

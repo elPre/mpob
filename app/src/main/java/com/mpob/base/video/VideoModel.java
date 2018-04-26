@@ -129,7 +129,7 @@ public class VideoModel implements
         list.add(new Camera.Builder().picture(mContext.getResources().getDrawable(R.drawable.thumb_bunny))
                 .name("Live Streaming")
                 .description("Description Camera WITH AAC")
-                .url("http://demo.myparentsonboard.com/livelow/cam1.m3u8?md5=grQlnqN5ClUvpuMqGj9BKg&expires=1522643749")
+                .url("https://devstreaming-cdn.apple.com/videos/streaming/examples/bipbop_4x3/gear1/prog_index.m3u8")
                 .thumbnail("http://demo.myparentsonboard.com/Thumbnails/Thumb_Cam1.jpg?md5=txBnfjtAWbHDTjCjBhCoHg&expires=1522643749")
                 .extension("m3u8")
                 .build());
@@ -137,7 +137,7 @@ public class VideoModel implements
         list.add(new Camera.Builder().picture(mContext.getResources().getDrawable(R.drawable.thumb_bunny))
                 .name("Live Streaming")
                 .description("Live Streaming 3 AAC")
-                .url("http://demo.myparentsonboard.com/livelow/cam2.m3u8?md5=Yqz02m12mSIwJAHzR7JMVA&expires=1522643749")
+                .url("https://tungsten.aaplimg.com/VOD/bipbop_adv_example_v2/master.m3u8")
                 .thumbnail("http://demo.myparentsonboard.com/Thumbnails/Thumb_Cam2.jpg?md5=DDOW0luTQBjltCtbQml9Eg&expires=1522643749")
                 .extension("m3u8")
                 .build());

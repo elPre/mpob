@@ -36,15 +36,6 @@ public class RulesBasedAbrTrackSelection extends BaseTrackSelection {
 		}
 	}
 
-	@Override
-	public void updateSelectedTrack(long bufferedDurationUs) {
-		long bitrateEstimate = mBandwidthMeter.getBitrateEstimate();
-		if (bitrateEstimate == BandwidthMeter.NO_ESTIMATE) {
-			bitrateEstimate = IAbrStreamingRules.NO_ESTIMATE;
-		}
-		mSelectedTrack = mAbrStreamingRules.selectAdaptiveTrack(mTracks, bitrateEstimate, bufferedDurationUs);
-
-	}
 
 	@Override
 	public int getSelectedIndex() {
@@ -61,6 +52,16 @@ public class RulesBasedAbrTrackSelection extends BaseTrackSelection {
 		return null;
 	}
 
+	@Override
+	public void updateSelectedTrack(long playbackPositionUs, long bufferedDurationUs, long availableDurationUs) {
+		long bitrateEstimate = mBandwidthMeter.getBitrateEstimate();
+		if (bitrateEstimate == BandwidthMeter.NO_ESTIMATE) {
+			bitrateEstimate = IAbrStreamingRules.NO_ESTIMATE;
+		}
+		mSelectedTrack = mAbrStreamingRules.selectAdaptiveTrack(mTracks, bitrateEstimate, bufferedDurationUs);
+
+	}
+
 	/**
 	 * Factory for {@link RulesBasedAbrTrackSelection} instances.
 	 */
@@ -70,7 +71,7 @@ public class RulesBasedAbrTrackSelection extends BaseTrackSelection {
 		private final IAbrStreamingRules mAbrStreamingRules;
 
 		/**
-		 * @param bandwidthMeter                    Provides an estimate of the currently available bandwidth.
+		 * @param bandwidthMeter Provides an estimate of the currently available bandwidth.
 		 */
 		public Factory(BandwidthMeter bandwidthMeter, IAbrStreamingRules streamingRules) {
 			mBandwidthMeter = bandwidthMeter;

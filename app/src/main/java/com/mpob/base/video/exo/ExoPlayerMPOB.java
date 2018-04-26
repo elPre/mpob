@@ -17,10 +17,10 @@ import android.widget.RelativeLayout;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayer.EventListener;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.PlaybackParameters;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.Renderer;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
@@ -30,7 +30,6 @@ import com.google.android.exoplayer2.drm.FrameworkMediaCrypto;
 import com.google.android.exoplayer2.drm.FrameworkMediaDrm;
 import com.google.android.exoplayer2.drm.HttpMediaDrmCallback;
 import com.google.android.exoplayer2.drm.UnsupportedDrmException;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.AdaptiveMediaSourceEventListener;
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
@@ -38,7 +37,6 @@ import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.source.dash.DashMediaSource;
 import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource;
-import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource;
 import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
@@ -55,6 +53,8 @@ import com.google.android.exoplayer2.util.Util;
 import com.mpob.base.R;
 import com.mpob.base.video.IVideoAPI;
 import com.mpob.base.video.IVideoPlayerAPI;
+import com.mpob.base.video.exo.mute.DefaultHlsExtractorFactoryMute;
+import com.mpob.base.video.exo.mute.HlsMediaSourceMute;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
@@ -346,7 +346,30 @@ public class ExoPlayerMPOB implements IVideoPlayerAPI,EventListener{
 
         int type = TextUtils.isEmpty(overrideExtension) ? Util.inferContentType(uri)
                 : Util.inferContentType("." + overrideExtension);
+        switch (type) {
+            case C.TYPE_DASH:
+                return new DashMediaSource.Factory(
+                        new DefaultDashChunkSource.Factory(mMediaDataSourceFactory),
+                        buildDataSourceFactory(false))
+                        .createMediaSource(uri, mMainHandler, mEventLogger);
+            case C.TYPE_SS:
+                return new SsMediaSource.Factory(
+                        new DefaultSsChunkSource.Factory(mMediaDataSourceFactory),
+                        buildDataSourceFactory(false))
+                        .createMediaSource(uri, mMainHandler, mEventLogger);
+            case C.TYPE_HLS:
+                return new HlsMediaSourceMute.Factory(mMediaDataSourceFactory)
+                        .setExtractorFactory(new DefaultHlsExtractorFactoryMute())
+                         .createMediaSource(uri, mMainHandler, mEventLogger);
+            case C.TYPE_OTHER:
+                return new ExtractorMediaSource.Factory(mMediaDataSourceFactory)
+                        .createMediaSource(uri, mMainHandler, mEventLogger);
+            default: {
+                throw new IllegalStateException("Unsupported type: " + type);
+            }
+        }
 
+        /*
         switch (type) {
             case C.TYPE_SS:  // smooth streaming
                 return new SsMediaSource(uri, buildDataSourceFactory(false),
@@ -361,8 +384,10 @@ public class ExoPlayerMPOB implements IVideoPlayerAPI,EventListener{
                         mMainHandler, mExtractorMediaSourceEventListener);
             default: {
                 throw new IllegalStateException("Unsupported type: " + type);
+
             }
         }
+        */
     }
 
 
@@ -379,8 +404,8 @@ public class ExoPlayerMPOB implements IVideoPlayerAPI,EventListener{
         mEventLogger = new EventLogger(mTrackSelector);
 
         mDefaultDrmSessionManagerListener = mEventLogger;
-        mAdaptiveMediaSourceEventListener = mEventLogger;
-        mExtractorMediaSourceEventListener = mEventLogger;
+        //mAdaptiveMediaSourceEventListener = mEventLogger;
+        //mExtractorMediaSourceEventListener = mEventLogger;
 
     }
 
@@ -559,8 +584,9 @@ public class ExoPlayerMPOB implements IVideoPlayerAPI,EventListener{
 
     }
 
+
     @Override
-    public void onTimelineChanged(Timeline timeline, Object manifest) {
+    public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
 
     }
 
@@ -577,16 +603,16 @@ public class ExoPlayerMPOB implements IVideoPlayerAPI,EventListener{
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
         switch (playbackState) {
-            case ExoPlayer.STATE_BUFFERING:
+            case Player.STATE_BUFFERING:
                 mPlayerExoListener.sendMessage(PlayerEnum.BUFFERING);
                 break;
-            case ExoPlayer.STATE_ENDED:
+            case Player.STATE_ENDED:
                 mPlayerExoListener.sendMessage(PlayerEnum.ENDED);
                 break;
-            case ExoPlayer.STATE_IDLE:
+            case Player.STATE_IDLE:
                 mPlayerExoListener.sendMessage(PlayerEnum.IDLE);
                 break;
-            case ExoPlayer.STATE_READY:
+            case Player.STATE_READY:
                 mPlayerExoListener.sendMessage(PlayerEnum.READY);
                 break;
             default:
@@ -595,17 +621,33 @@ public class ExoPlayerMPOB implements IVideoPlayerAPI,EventListener{
     }
 
     @Override
+    public void onRepeatModeChanged(int repeatMode) {
+
+    }
+
+    @Override
+    public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
+
+    }
+
+    @Override
     public void onPlayerError(ExoPlaybackException error) {
 
     }
 
     @Override
-    public void onPositionDiscontinuity() {
+    public void onPositionDiscontinuity(int reason) {
+
+    }
+
+
+    @Override
+    public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
 
     }
 
     @Override
-    public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
+    public void onSeekProcessed() {
 
     }
 
